@@ -51,6 +51,17 @@ button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 h1{margin:0;font:900 clamp(40px,8vw,84px)/.92 var(--f-puz);font-stretch:118%;letter-spacing:-.02em;text-wrap:balance}
 h1 .flip{display:inline-block;transform:scaleX(-1);color:var(--acc)}
 .lede{margin:0;max-width:60ch;color:var(--ink-2);font-size:16px}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-block:10px 4px}
+.btn-hero{display:inline-flex;align-items:center;gap:16px;border:2px solid var(--ink);background:var(--acc);color:var(--tile);border-radius:14px;padding:16px 28px 16px 20px;font:800 clamp(22px,3.4vw,30px)/1.05 var(--f-puz);font-stretch:110%;box-shadow:6px 6px 0 var(--ink);transition:transform .12s,box-shadow .12s;text-align:left;max-width:100%}
+.btn-hero:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.btn-hero:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink)}
+.btn-hero .lbl{display:flex;flex-direction:column;gap:6px}
+.btn-hero small{font:500 13px/1.2 var(--f-mono);letter-spacing:.02em;opacity:.85}
+.play{flex:none;width:46px;height:46px;border-radius:50%;background:var(--tile);position:relative}
+.play::after{content:"";position:absolute;left:18px;top:13px;border-left:16px solid var(--acc);border-block:10px solid transparent}
+.btn-ghost{border:0;background:none;padding:8px 2px;font-size:16px;font-weight:600;color:var(--ink);text-decoration:underline;text-decoration-color:var(--acc);text-decoration-thickness:2px;text-underline-offset:5px}
+.btn-ghost:hover{color:var(--acc)}
+@media (prefers-reduced-motion:reduce){.btn-hero{transition:none}}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;font:500 12px/1.4 var(--f-mono);color:var(--ink-2)}
 .legend b{color:var(--acc);font-weight:600;letter-spacing:.1em}
 
@@ -198,10 +209,15 @@ main .wrap{padding-block:22px 60px}
     <p class="eyebrow">Rébus visuels · gestion de projet &amp; de portefeuille</p>
     <h1>Dingbats du chef <span class="flip">de</span> projet</h1>
     <p class="lede" id="lede">Des expressions du métier cachées dans des jeux de lettres. Touchez un rébus pour voir la réponse, ou lancez le quiz pour l'animer en atelier.</p>
+    <div class="cta">
+      <button class="btn-hero" id="heroQuiz"><span class="play" aria-hidden="true"></span><span class="lbl">Lancer le quiz<small id="heroSub">113 rébus · chrono 30 s · à projeter</small></span></button>
+      <button class="btn-ghost" id="openLib" aria-expanded="false" aria-controls="lib">Parcourir la bibliothèque <span aria-hidden="true">↓</span></button>
+    </div>
     <p class="legend"><span><b>●○○</b> facile</span><span><b>●●○</b> moyen</span><span><b>●●●</b> corsé</span></p>
   </div>
 </header>
 
+<div id="lib" hidden>
 <div class="bar">
   <div class="wrap">
     <div class="chips" id="themes" role="group" aria-label="Thèmes"></div>
@@ -225,6 +241,7 @@ main .wrap{padding-block:22px 60px}
     <div class="grid" id="grid"></div>
   </div>
 </main>
+</div>
 
 <div class="quiz" id="quiz" hidden role="dialog" aria-modal="true" aria-label="Quiz rébus">
   <div class="qtop">
@@ -747,7 +764,8 @@ let order=R.map((_,i)=>i), fTh='all', fLv=0, revealAll=false;
 const opened=new Set();
 const $=id=>document.getElementById(id);
 
-document.getElementById('lede').textContent=`${R.length} expressions du métier cachées dans des jeux de lettres. Touchez un rébus pour voir la réponse, ou lancez le quiz pour l'animer en atelier.`;
+document.getElementById('lede').textContent=`${R.length} expressions du métier cachées dans des jeux de lettres. Lancez le quiz pour l'animer en atelier, ou parcourez la bibliothèque pour voir chaque réponse.`;
+document.getElementById('heroSub').textContent=`${R.length} rébus · chrono 30 s · à projeter`;
 
 function visible(){return order.filter(i=>(fTh==='all'||R[i].th===fTh)&&(!fLv||R[i].lv===fLv));}
 function renderThemes(){
@@ -826,6 +844,10 @@ $('quiz').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!
   ({prev:qPrev,next:qNext,reveal:qReveal,yes:()=>qJudge(true),no:()=>qJudge(false),close:qClose,
     restart:()=>{for(let i=Q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[Q[i],Q[j]]=[Q[j],Q[i]];}qi=0;res=new Array(Q.length).fill(null);qShow();}})[b.dataset.q]();});
 $('startQuiz').addEventListener('click',qStart);
+$('heroQuiz').addEventListener('click',qStart);
+$('openLib').addEventListener('click',e=>{const lib=$('lib'),b=e.currentTarget;lib.hidden=!lib.hidden;b.setAttribute('aria-expanded',!lib.hidden);
+  b.innerHTML=lib.hidden?'Parcourir la bibliothèque <span aria-hidden="true">↓</span>':'Masquer la bibliothèque <span aria-hidden="true">↑</span>';
+  if(!lib.hidden)lib.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});
 $('qclose').addEventListener('click',qClose);
 $('qtimerBtn').addEventListener('click',e=>{timerOn=!timerOn;e.currentTarget.setAttribute('aria-pressed',timerOn);
   e.currentTarget.textContent=timerOn?'Chrono 30 s':'Chrono coupé';$('qtimer').classList.toggle('off',!timerOn);if(!ended)startT();});
