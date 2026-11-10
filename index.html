@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="113 rébus visuels sur la gestion de projet et de portefeuille, avec un mode quiz chronométré pour animer vos ateliers.">
+<meta property="og:title" content="Dingbats du chef de projet">
+<meta property="og:description" content="113 rébus visuels sur la gestion de projet, avec un mode quiz pour les ateliers.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232547D0'/%3E%3Ctext x='16' y='23' font-family='Arial' font-weight='900' font-size='20' fill='white' text-anchor='middle'%3E%3F%3C/text%3E%3C/svg%3E">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Dingbats du chef de projet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: planning-paper header, sticky filter bar, square puzzle tiles in a grid; quiz overlay for workshops. Duotone = graphite ink + cobalt. */
+:root{
+  --bg:#E9ECE6; --surface:#F6F7F3; --tile:#FCFCFA; --ink:#141C2B; --ink-2:#4A5466; --mute:#98A0AD; --line:#D2D7CE;
+  --acc:#2547D0; --acc-soft:#D9E0F8; --shade:#C2C9D5;
+  --ok:#1E8F4E; --bad:#D1352B; --ice:#D6ECF5; --ice-hi:rgba(255,255,255,.65); --ice-edge:#A9D1E2; --ice-ink:#24607B;
+  --water:#7FB4D8; --water-ink:#2B78B5; --wood:#C08A55; --wood-ink:#3A2410; --wine:#8E2A45;
+  --f-puz:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-ui:"Instrument Sans",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F131A; --surface:#161B24; --tile:#1B212C; --ink:#EDF0F5; --ink-2:#AAB2C0; --mute:#6D7687; --line:#2A3240;
+  --acc:#86A2FF; --acc-soft:#26315A; --shade:#3A4354;
+  --ok:#4FCB86; --bad:#FF6A5F; --ice:#1D3B49; --ice-hi:rgba(255,255,255,.08); --ice-edge:#2E5A6C; --ice-ink:#A6DBF0;
+  --water:#2C5F86; --water-ink:#7FC0F2; --wood:#7A5432; --wood-ink:#F6E3CC; --wine:#C9587A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F131A; --surface:#161B24; --tile:#1B212C; --ink:#EDF0F5; --ink-2:#AAB2C0; --mute:#6D7687; --line:#2A3240;
+  --acc:#86A2FF; --acc-soft:#26315A; --shade:#3A4354;
+  --ok:#4FCB86; --bad:#FF6A5F; --ice:#1D3B49; --ice-hi:rgba(255,255,255,.08); --ice-edge:#2E5A6C; --ice-ink:#A6DBF0;
+  --water:#2C5F86; --water-ink:#7FC0F2; --wood:#7A5432; --wood-ink:#F6E3CC; --wine:#C9587A; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+/* Header on planning paper */
+.hd{border-bottom:1px solid var(--line);
+  background:
+   repeating-linear-gradient(90deg,transparent 0 47px,var(--line) 47px 48px),
+   var(--surface)}
+.hd .wrap{padding-block:40px 30px;display:grid;gap:14px}
+.eyebrow{margin:0;font:500 12px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+h1{margin:0;font:900 clamp(40px,8vw,84px)/.92 var(--f-puz);font-stretch:118%;letter-spacing:-.02em;text-wrap:balance}
+h1 .flip{display:inline-block;transform:scaleX(-1);color:var(--acc)}
+.lede{margin:0;max-width:60ch;color:var(--ink-2);font-size:16px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;font:500 12px/1.4 var(--f-mono);color:var(--ink-2)}
+.legend b{color:var(--acc);font-weight:600;letter-spacing:.1em}
+
+/* Filter bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar .wrap{padding-block:12px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;max-width:100%}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:500;white-space:nowrap}
+.chip small{font-family:var(--f-mono);color:var(--mute);margin-left:4px;font-size:11px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.7}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none}
+.seg button{border:0;background:var(--surface);padding:6px 11px;font-size:13px;font-weight:500}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--acc);color:var(--tile)}
+.actions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;font-size:13.5px;font-weight:500}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:var(--tile);font-weight:600}
+.btn:hover{border-color:var(--ink-2)}
+.btn.primary:hover{filter:brightness(1.08)}
+
+/* Grid */
+main .wrap{padding-block:22px 60px}
+.count{margin:0 0 14px;font:500 12px var(--f-mono);color:var(--ink-2);letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:14px}
+@media (max-width:420px){.grid{grid-template-columns:1fr 1fr;gap:10px}}
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.tilebtn{display:block;border:0;padding:0;background:none;width:100%}
+.tilebtn .t{border-bottom:1px solid var(--line)}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 0;font:500 11px/1 var(--f-mono);color:var(--mute)}
+.meta .lv{color:var(--acc);letter-spacing:.12em}
+.ans{margin:0;padding:6px 10px 11px;min-height:3.1em;font-size:13.5px;line-height:1.3;font-weight:600;color:var(--ink)}
+.ans.hid{color:var(--mute);font-weight:500;font-style:italic}
+.ans small{display:block;font-weight:400;color:var(--ink-2);font-size:12px;margin-top:3px}
+
+/* ---------- Puzzle tile primitives ---------- */
+.t{position:relative;aspect-ratio:1;width:100%;container-type:inline-size;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2cqw;overflow:hidden;background:var(--tile)}
+.w{display:inline-block;font-family:var(--f-puz);font-weight:800;line-height:.92;white-space:nowrap;color:var(--ink);font-size:13cqw}
+.a{color:var(--acc)} .m{color:var(--mute)}
+.row{display:flex;align-items:center;justify-content:center;gap:2.5cqw}
+.tight{gap:0}
+.col{display:flex;flex-direction:column;align-items:center;gap:2cqw}
+.sv{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.inl{display:block;overflow:visible}
+.k{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ka{stroke:var(--acc)} .dash{stroke-dasharray:3 4}
+.fs{fill:var(--acc-soft)} .fa{fill:var(--acc)} .fw{fill:var(--water);opacity:.82}
+.frame{border:1.6cqw solid var(--acc);padding:5cqw 6cqw}
+.gbar{position:absolute;height:11%;background:var(--acc-soft);border-left:1.2cqw solid var(--acc);display:flex;align-items:center;padding-left:2.5cqw;border-radius:0 1cqw 1cqw 0}
+.fadeout{-webkit-mask-image:linear-gradient(90deg,#000 50%,transparent 90%);mask-image:linear-gradient(90deg,#000 50%,transparent 90%)}
+.hr{position:absolute;left:12%;right:12%;height:.8cqw;background:var(--acc)}
+.pill{font:600 4.4cqw/1 var(--f-mono);color:var(--acc);border:.6cqw solid var(--acc);border-radius:99px;padding:1.4cqw 3cqw;letter-spacing:.05em}
+.box{display:inline-flex;align-items:center;justify-content:center;border:1.2cqw solid var(--acc);border-radius:1cqw}
+.speed{display:flex;flex-direction:column;gap:2cqw;align-items:flex-end}
+.speed i{display:block;height:1.1cqw;width:12cqw;background:var(--acc);border-radius:1cqw}
+.speed i:nth-child(2){width:18cqw}.speed i:nth-child(3){width:8cqw}
+.road{display:block;width:78cqw;height:10cqw;background:repeating-linear-gradient(90deg,var(--acc) 0 6cqw,transparent 6cqw 11cqw) center/100% 1cqw no-repeat,var(--ink)}
+.tomb{display:flex;flex-direction:column;align-items:center;gap:2.5cqw;border:1.2cqw solid var(--ink);border-radius:30cqw 30cqw 1cqw 1cqw;padding:10cqw 8cqw 9cqw}
+.arch{width:64cqw;height:48cqw;border:2.4cqw solid var(--ink);border-bottom:0;border-radius:32cqw 32cqw 0 0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5cqw;background:var(--acc-soft)}
+.fence{padding:4.5cqw;background:repeating-linear-gradient(90deg,var(--acc) 0 1.6cqw,transparent 1.6cqw 3.4cqw)}
+.fence>div{background:var(--tile);padding:5cqw}
+.ul{display:block;width:44cqw;height:.9cqw;background:var(--acc);border-radius:1cqw}
+.wallet{position:relative;border:1.4cqw solid var(--acc);border-radius:5cqw;padding:5cqw 17cqw 5cqw 8cqw;background:var(--acc-soft)}
+.wallet::after{content:"";position:absolute;right:-1.4cqw;top:50%;transform:translateY(-50%);width:13cqw;height:15cqw;border:1.4cqw solid var(--acc);border-radius:4cqw 0 0 4cqw;background:var(--tile)}
+.wallet .col{gap:1.6cqw}
+.case{position:relative;border:1.4cqw solid var(--ink);border-radius:3cqw;padding:7cqw 6cqw;background:var(--acc-soft);margin-top:6cqw}
+.handle{position:absolute;top:-8.4cqw;left:50%;transform:translateX(-50%);width:20cqw;height:7cqw;border:1.4cqw solid var(--ink);border-bottom:0;border-radius:3cqw 3cqw 0 0}
+.ice{background:var(--ice);border-radius:4cqw;padding:10cqw 7cqw;box-shadow:inset 2cqw 2cqw 0 var(--ice-hi),inset -1cqw -1cqw 0 var(--ice-edge)}
+.ice .w{color:var(--ice-ink)}
+.pipe{position:relative;width:74cqw;height:20cqw;border-block:1.4cqw solid var(--ink);background:var(--acc-soft);display:flex;align-items:center;justify-content:center}
+.pipe::before,.pipe::after{content:"";position:absolute;top:-5.4cqw;width:3.4cqw;height:28cqw;background:var(--ink);border-radius:.6cqw}
+.pipe::before{left:-3.4cqw}.pipe::after{right:-3.4cqw}
+.sheet{position:relative;width:54cqw;height:68cqw;border:1cqw solid var(--ink);display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(transparent 0 7cqw,var(--line) 7cqw 7.5cqw)}
+.sheet::after{content:"";position:absolute;top:-1cqw;right:-1cqw;width:13cqw;height:13cqw;background:linear-gradient(225deg,var(--tile) 50%,var(--acc) 50%)}
+.sheet .w,.hatch .w,.plate{background:var(--tile);padding:1cqw 2cqw}
+.ghost1{color:var(--acc-soft)!important}
+.edge{position:absolute;right:0;top:0;bottom:0;width:2cqw;background:var(--acc)}
+.gap{display:block;width:26cqw;height:6cqw;border-inline:1cqw solid var(--acc);background:linear-gradient(var(--acc),var(--acc)) center/100% .8cqw no-repeat}
+.rail{display:block;width:60cqw;height:4cqw;border-top:1cqw solid var(--ink);background:repeating-linear-gradient(90deg,var(--mute) 0 1.4cqw,transparent 1.4cqw 6cqw)}
+.hatch{padding:9cqw 8cqw;border:1cqw dashed var(--acc);background:repeating-linear-gradient(45deg,var(--acc-soft) 0 2cqw,transparent 2cqw 4cqw)}
+.vert{writing-mode:vertical-rl;text-orientation:upright;letter-spacing:-.08em}
+.silo{display:flex;align-items:center;justify-content:center;width:17cqw;height:64cqw;border:1cqw solid var(--ink);border-radius:9cqw 9cqw 1cqw 1cqw;background:var(--acc-soft)}
+.colm{display:block;width:13cqw;height:70cqw;border:.8cqw solid var(--mute);border-radius:1cqw}
+.spirit{display:flex;flex-direction:column;align-items:center;gap:3cqw;padding:10cqw 8cqw 13cqw;background:var(--acc-soft);border-radius:32cqw 32cqw 0 0;clip-path:polygon(0 0,100% 0,100% 100%,83% 91%,67% 100%,50% 91%,33% 100%,17% 91%,0 100%)}
+.eyes{font:900 5cqw/1 var(--f-puz);color:var(--ink);letter-spacing:.4em;margin-right:-.4em}
+.table{position:absolute;left:50%;top:50%;width:34cqw;height:34cqw;transform:translate(-50%,-50%);border-radius:50%;background:var(--acc-soft);border:1cqw solid var(--acc)}
+.cells{display:grid;grid-template-columns:repeat(3,22cqw);grid-template-rows:repeat(3,22cqw);border-top:.8cqw solid var(--ink);border-left:.8cqw solid var(--ink)}
+.cells span{border-right:.8cqw solid var(--ink);border-bottom:.8cqw solid var(--ink);display:flex;align-items:center;justify-content:center}
+.cells span:nth-child(5){background:var(--acc-soft)}
+.narrow{width:30cqw;padding:6cqw 0;border-inline:1.4cqw solid var(--ink);display:flex;justify-content:center}
+.plank{display:flex;justify-content:center;width:74cqw;padding:2.5cqw 0;background:var(--wood);border-radius:1cqw}
+.onwood{color:var(--wood-ink)!important}
+.basket{display:block;width:20cqw;height:11cqw;border:1.1cqw solid var(--acc);border-top:0;border-radius:0 0 9cqw 9cqw}
+.weight{display:flex;align-items:center;justify-content:center;width:40cqw;height:18cqw;background:var(--ink);color:var(--tile);font:800 7cqw/1 var(--f-puz);clip-path:polygon(18% 0,82% 0,100% 100%,0 100%)}
+.arrow{position:relative;display:block;width:34cqw;height:1.6cqw;background:var(--ink);margin-right:5cqw}
+.arrow::after{content:"";position:absolute;right:-4.5cqw;top:50%;transform:translateY(-50%);border-left:5cqw solid var(--ink);border-block:3.2cqw solid transparent}
+.water{color:var(--water-ink)!important}
+.snow{display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:50%;border:1cqw solid var(--acc);background:var(--acc-soft)}
+.hay{display:grid;grid-template-columns:repeat(4,auto);gap:2.5cqw 4cqw;align-items:center;justify-items:center}
+.mono{font-family:var(--f-mono)!important;font-weight:500!important}
+
+
+/* ---------- Illustrated scenes ---------- */
+.scene{position:absolute;inset:0;width:100%;height:100%;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;overflow:hidden}
+.xi{fill:var(--ink)}.xa{fill:var(--acc)}.xs{fill:var(--acc-soft)}.xt{fill:var(--tile)}.xh{fill:var(--shade)}.xl{fill:var(--line)}.xm{fill:var(--mute)}
+.xw{fill:var(--water)}.xd{fill:var(--wood)}.xdi{fill:var(--wood-ink)}.xc{fill:var(--ice)}.xci{fill:var(--ice-ink)}.xg{fill:var(--ok)}.xr{fill:var(--bad)}.xv{fill:var(--wine)}.n{fill:none}
+.si{stroke:var(--ink)}.sa{stroke:var(--acc)}.st{stroke:var(--tile)}.sx{stroke:var(--shade)}.sm{stroke:var(--mute)}.sd{stroke:var(--wood)}.sdi{stroke:var(--wood-ink)}.se{stroke:var(--ice-edge)}.sg{stroke:var(--ok)}.sr{stroke:var(--bad)}
+.T{font-family:var(--f-puz);font-weight:800;text-anchor:middle;dominant-baseline:central;stroke:none}
+
+/* ---------- Quiz overlay ---------- */
+.quiz{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 14px) max(16px,env(safe-area-inset-left,0px))}
+.qtop{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font:500 13px var(--f-mono);color:var(--ink-2)}
+.qtop .pos{color:var(--ink);font-weight:600}
+.qtop .sc{display:flex;gap:10px}
+.qtop .sc .ok{color:var(--ok)} .qtop .sc .ko{color:var(--bad)}
+.qtop .sp{flex:1}
+.timer{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:10px}
+.timer i{display:block;height:100%;width:100%;background:var(--acc);transform-origin:left;transition:transform .1s linear}
+.timer.off i{background:transparent}
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding-block:14px}
+.qtile{width:min(62vh,92vw,600px);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.qans{min-height:3.2em;text-align:center;font:800 clamp(20px,3.4vw,32px)/1.15 var(--f-puz);text-wrap:balance;max-width:24ch}
+.qans small{display:block;font:400 14px/1.4 var(--f-ui);color:var(--ink-2);margin-top:6px}
+.qans.hid{color:var(--mute);font:500 15px var(--f-mono)}
+.qctl{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.qctl .btn{padding:10px 16px;font-size:15px}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:var(--tile);font-weight:600}
+.btn.ko{border-color:var(--bad);color:var(--bad);font-weight:600}
+.kbd{font:500 11px var(--f-mono);color:var(--mute);text-align:center;margin:0}
+.endc{display:grid;gap:14px;justify-items:center;text-align:center}
+.endc .big{font:900 clamp(56px,12vw,120px)/1 var(--f-puz);font-stretch:115%;color:var(--acc)}
+.endc p{margin:0;color:var(--ink-2);max-width:44ch}
+.miss{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:640px}
+.miss li{border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:13px;background:var(--surface)}
+@media (prefers-reduced-motion:reduce){.timer i{transition:none}}
+</style>
+</head>
+<body>
+
+
+<header class="hd">
+  <div class="wrap">
+    <p class="eyebrow">Rébus visuels · gestion de projet &amp; de portefeuille</p>
+    <h1>Dingbats du chef <span class="flip">de</span> projet</h1>
+    <p class="lede" id="lede">Des expressions du métier cachées dans des jeux de lettres. Touchez un rébus pour voir la réponse, ou lancez le quiz pour l'animer en atelier.</p>
+    <p class="legend"><span><b>●○○</b> facile</span><span><b>●●○</b> moyen</span><span><b>●●●</b> corsé</span></p>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="chips" id="themes" role="group" aria-label="Thèmes"></div>
+    <div class="seg" id="levels" role="group" aria-label="Niveau">
+      <button data-lv="0" aria-pressed="true">Tous</button>
+      <button data-lv="1" aria-pressed="false">Facile</button>
+      <button data-lv="2" aria-pressed="false">Moyen</button>
+      <button data-lv="3" aria-pressed="false">Corsé</button>
+    </div>
+    <div class="actions">
+      <button class="btn" id="shuffle">Mélanger</button>
+      <button class="btn" id="revealAll" aria-pressed="false">Révéler tout</button>
+      <button class="btn primary" id="startQuiz">Lancer le quiz</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+  </div>
+</main>
+
+<div class="quiz" id="quiz" hidden role="dialog" aria-modal="true" aria-label="Quiz rébus">
+  <div class="qtop">
+    <span class="pos" id="qpos"></span>
+    <span class="sc"><span class="ok" id="qok">✓ 0</span><span class="ko" id="qko">✗ 0</span></span>
+    <span class="sp"></span>
+    <button class="btn" id="qtimerBtn" aria-pressed="true">Chrono 30 s</button>
+    <button class="btn" id="qfs">Plein écran</button>
+    <button class="btn" id="qclose">Fermer</button>
+  </div>
+  <div class="timer" id="qtimer"><i id="qbar"></i></div>
+  <div class="stage" id="stage"></div>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+const w=(t,s='',c='')=>`<span class="w ${c}" style="${s}">${t}</span>`;
+const a=(t,s='',c='')=>w(t,s,'a '+c);
+const m=(t,s='',c='')=>w(t,s,'m '+c);
+const at=(x,y,tr='')=>`position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%) ${tr};`;
+const f=n=>`font-size:${n}cqw;`;
+const L=(word,sf,cf=()=>'')=>[...word].map((ch,i,arr)=>`<span class="w ${cf(i,arr.length)}" style="${sf(i,arr.length)}">${ch}</span>`).join('');
+const row=(...x)=>`<div class="row">${x.join('')}</div>`;
+const tight=(...x)=>`<div class="row tight">${x.join('')}</div>`;
+const col=(...x)=>`<div class="col">${x.join('')}</div>`;
+const sv=(inner)=>`<svg class="sv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${inner}</svg>`;
+const wave=`<svg class="inl" viewBox="0 0 100 16" style="width:62cqw;height:10cqw" aria-hidden="true"><path class="k ka" d="M2 8 Q8.5 0 15 8 T28 8 T41 8 T54 8 T67 8 T80 8 T93 8"/></svg>`;
+const circ=(word,r,size,cf)=>L(word,(i,n)=>{const t=-Math.PI/2+i*2*Math.PI/n;return at((50+r*Math.cos(t)).toFixed(2),(50+r*Math.sin(t)).toFixed(2),`rotate(${((t+Math.PI/2)*180/Math.PI).toFixed(1)}deg)`)+f(size)},cf);
+
+const R=[];
+const p=(th,lv,ans,r,note='')=>R.push({th,lv,ans,r,note});
+
+/* ---------- CYCLE DE PROJET ---------- */
+p('cycle',1,"Rétroplanning", col(w('GNINNALP',f(13.5)),a('←',f(9))), "PLANNING écrit à rebours.");
+p('cycle',1,"Cycle en V", L('CYCLE',i=>at([16,33,50,67,84][i],[24,47,72,47,24][i])+f(15),i=>i==2?'a':''), "Les lettres de CYCLE dessinent un V.");
+p('cycle',1,"Phase de cadrage", `<div class="frame">${w('PHASE',f(14))}</div>`, "PHASE posée dans un cadre.");
+p('cycle',2,"Diagramme de Gantt", [...'GANTT'].map((ch,i)=>`<div class="gbar" style="left:${7+i*12}%;top:${12+i*15.5}%;width:${[30,40,26,36,30][i]}%">${w(ch,f(8.5))}</div>`).join(''), "G-A-N-T-T sur des barres de planning décalées.");
+p('cycle',1,"Livraison continue", w('LIVRAISON LIVRAISON LIVRAISON','position:absolute;left:9%;top:50%;transform:translateY(-50%);'+f(10.5),'fadeout'), "LIVRAISON se répète sans s'arrêter.");
+p('cycle',1,"Ligne de base (baseline)", w('LIGNE',at(50,80)+f(14))+`<div class="hr" style="top:90%"></div>`, "LIGNE posée tout en bas.");
+p('cycle',2,"Kick-off", col(m('KICK',f(20)),`<span class="pill">● OFF</span>`), "KICK est éteint : il est « off ».");
+p('cycle',1,"Go / No go", row(a('GO',f(17)),m('/',f(13)),w('GO',f(17)+'text-decoration:line-through;text-decoration-thickness:1.3cqw;text-decoration-color:var(--acc)','m')), "Un GO validé, un GO barré.");
+p('cycle',3,"Mise en prod", tight(w('PR',f(15)),a('MISE',f(15)),w('OD',f(15))), "MISE se trouve en (dans) PROD.");
+p('cycle',1,"Point d'étape", tight(w('ÉTAPE',f(15)),a('●',f(7)+'align-self:flex-end;margin:0 0 .4cqw 1.5cqw')), "ÉTAPE suivie d'un gros point.");
+p('cycle',2,"Jalon décalé", tight(w('JA',f(18)),a('LON',f(18)+'transform:translate(2cqw,10cqw)')), "La fin de JALON a glissé.");
+p('cycle',2,"Dérive du périmètre (scope creep)", `<span class="box" style="position:absolute;left:8%;top:30%;width:60%;height:36%"></span>`+w('PÉRIMÈ',at(38,48)+f(10))+a('T',at(73,58,'rotate(16deg)')+f(10))+a('R',at(83,70,'rotate(34deg)')+f(10))+a('E',at(91,84,'rotate(58deg)')+f(10)), "Les dernières lettres de PÉRIMÈTRE sortent du cadre.");
+p('cycle',1,"Sprint", row(`<span class="speed"><i></i><i></i><i></i></span>`,w('SPRINT',f(14)+'transform:skewX(-14deg)')), "SPRINT lancé à pleine vitesse.");
+p('cycle',2,"Backlog", w('GOL',f(26)), "LOG lu à l'envers : back + log.");
+p('cycle',2,"Roadmap", col(w('MAP',f(19)),`<span class="road"></span>`), "MAP posé sur une route.");
+p('cycle',2,"Deadline", `<div class="tomb">${m('R.I.P.',f(5))}${w('LINE',f(13))}</div>`, "LINE gravée sur une pierre tombale.");
+p('cycle',2,"Dérapage du planning", tight(L('PLANNING',i=>f(11)+`transform:translateY(${(i*i*0.32).toFixed(1)}cqw) rotate(${i*6}deg)`,i=>i>3?'a':'')), "PLANNING qui part dans le décor.");
+p('cycle',2,"Retard de livraison", tight(w('LIVRAISO',f(10.5)),m('···',f(10.5)+'margin-inline:2cqw'),a('N',f(10.5))), "Le N de LIVRAISON arrive en retard.");
+p('cycle',1,"Effet tunnel", `<div class="arch">${w('PROJET',f(10))}</div>`, "PROJET au fond d'un tunnel.");
+p('cycle',2,"Clôture du projet", `<div class="fence"><div>${w('PROJET',f(11))}</div></div>`, "PROJET entouré d'une clôture.");
+p('cycle',1,"Planning serré", row(a('→',f(10)),w('PLANNING',f(12.5)+'letter-spacing:-.16em'),a('←',f(10))), "Les lettres de PLANNING sont serrées.");
+p('cycle',1,"Lancement du projet", sv(`<path class="k ka dash" d="M8 94 Q 22 78 40 64"/>`)+w('PROJET',at(60,44,'rotate(-38deg)')+f(13)), "PROJET qui décolle.");
+p('cycle',1,"Tâches en parallèle", col(w('TÂCHE',f(13)),`<span class="ul"></span>`,w('TÂCHE',f(13)),`<span class="ul"></span>`), "Deux TÂCHES sur deux lignes parallèles.");
+
+/* ---------- PORTEFEUILLE / PPM ---------- */
+p('ppm',1,"Portefeuille de projets", `<div class="wallet">${col(w('PROJET',f(6.5)),w('PROJET',f(6.5)),w('PROJET',f(6.5)))}</div>`, "Des PROJETS rangés dans un portefeuille.");
+p('ppm',1,"Coupe budgétaire", w('BUD',at(32,42,'rotate(-7deg)')+f(16))+w('GET',at(68,60,'rotate(6deg)')+f(16))+sv(`<line class="k ka dash" x1="47" y1="16" x2="53" y2="90"/>`)+a('✂︎',at(47,10)+f(8)), "BUDGET coupé en deux.");
+p('ppm',1,"Dépassement de budget", `<span class="box" style="width:46cqw;height:22cqw">${w('BUDGET',f(16))}</span>`, "BUDGET déborde de son cadre.");
+p('ppm',1,"Enveloppe budgétaire", sv(`<rect class="k ka" x="12" y="24" width="76" height="52" rx="2"/><path class="k ka" d="M12 25 L50 52 L88 25"/>`)+w('BUDGET',at(50,65)+f(8.5)), "BUDGET dans une enveloppe.");
+p('ppm',2,"Retour sur investissement (ROI)", col(a('RETOUR',f(10)),w('INVESTISSEMENT',f(6.4))), "RETOUR posé sur INVESTISSEMENT.");
+p('ppm',2,"Business case", `<div class="case"><span class="handle"></span>${w('BUSINESS',f(9))}</div>`, "BUSINESS dans une mallette (case).");
+p('ppm',2,"Quick win", col(w('WIN',f(21)),`<span class="pill">00:00:01</span>`), "Un WIN obtenu en une seconde.");
+p('ppm',1,"Shadow IT", w('IT',f(30)+'text-shadow:3.5cqw 3cqw 0 var(--shade)'), "IT et son ombre.");
+p('ppm',1,"Big picture (vue d'ensemble)", w('PICTURE',f(18)), "PICTURE en très grand.");
+p('ppm',2,"Low-hanging fruit", sv(`<path class="k" style="stroke-width:3" d="M2 14 Q 50 4 98 16"/><line class="k" x1="50" y1="10" x2="50" y2="72"/>`)+a('FRUIT',at(50,82)+f(12)), "FRUIT qui pend très bas : un gain facile.");
+p('ppm',2,"Sunk cost (coût irrécupérable)", w('COST',at(50,58)+f(20))+sv(`<path class="fw" d="M0 55 Q12.5 49 25 55 T50 55 T75 55 T100 55 V100 H0Z"/>`), "COST qui coule sous l'eau.");
+p('ppm',1,"Valeur ajoutée", row(w('VALEUR',f(14)),a('+',f(20))), "VALEUR + quelque chose.");
+p('ppm',1,"Projets gelés", `<div class="ice">${w('PROJETS',f(10))}</div>`, "PROJETS pris dans la glace.");
+p('ppm',2,"Pipeline de projets", `<div class="pipe">${w('PROJETS',f(9))}</div>`, "PROJETS dans un tuyau (pipeline).");
+p('ppm',1,"Feuille de route", `<div class="sheet">${w('ROUTE',f(11))}</div>`, "ROUTE écrite sur une feuille.");
+p('ppm',1,"Priorité n°1", a('1',at(50,50)+f(78),'ghost1')+w('PRIORITÉ',at(50,52)+f(12)), "PRIORITÉ posée sur un énorme 1.");
+p('ppm',2,"Portefeuille équilibré", w('PORTEFEUILLE',at(50,47)+f(7.4))+sv(`<line class="k" style="stroke-width:2.5" x1="8" y1="55" x2="92" y2="55"/><path class="fa" d="M50 56 L40 76 H60Z"/>`), "PORTEFEUILLE en équilibre sur une balance.");
+p('ppm',2,"Cash flow", tight(L('CASH',i=>f(16)+`transform:translateY(${(Math.sin(i*1.5)*6).toFixed(1)}cqw)`))+sv(`<path class="k ka" d="M6 80 Q15 74 24 80 T42 80 T60 80 T78 80 T96 80"/>`), "CASH qui s'écoule en vagues (flow).");
+p('ppm',2,"Budget parti en fumée", tight(L('BUDGET',i=>f(12.5)+`transform:translateY(${-i*3.2}cqw);opacity:${(1-i*0.15).toFixed(2)};filter:blur(${(i*0.22).toFixed(2)}cqw)`)), "BUDGET qui s'évapore.");
+p('ppm',1,"Long terme", w('TERME',f(9)+'letter-spacing:.9em;margin-right:-.9em'), "TERME très étiré, donc long.");
+p('ppm',3,"Dette technique", row(a('−',f(18)),w('TECHNIQUE',f(9.5))), "TECHNIQUE dans le négatif.");
+p('ppm',2,"Projet phare", sv(`<path class="fs" d="M50 50 L0 18 V44Z M50 50 L100 18 V44Z"/>`)+a('●',at(50,48)+f(6))+w('PROJET',at(50,64)+f(12)), "PROJET qui éclaire comme un phare.");
+p('ppm',2,"Fusion de projets", w('PROJET',at(44,44)+f(14))+a('PROJET',at(56,56)+f(14)+'opacity:.85'), "Deux PROJETS qui se superposent.");
+p('ppm',3,"Économies d'échelle", sv(`<g class="k"><line x1="26" y1="4" x2="26" y2="96"/><line x1="74" y1="4" x2="74" y2="96"/><line x1="26" y1="18" x2="74" y2="18"/><line x1="26" y1="34" x2="74" y2="34"/><line x1="26" y1="66" x2="74" y2="66"/><line x1="26" y1="82" x2="74" y2="82"/></g>`)+a('ÉCONOMIES',at(50,50)+f(8.5),'plate'), "ÉCONOMIES sur les barreaux d'une échelle.");
+
+/* ---------- PILOTAGE & REPORTING ---------- */
+p('pilot',1,"Tableau de bord", w('TABLEAU',at(88,50,'rotate(90deg)')+f(10))+`<span class="edge"></span>`, "TABLEAU collé au bord.");
+p('pilot',1,"Feu vert", w('FEU',f(26)+'color:var(--ok)'), "FEU en vert.");
+p('pilot',1,"Indicateur au rouge", w('INDICATEUR',f(9)+'color:var(--bad)'), "INDICATEUR en rouge.");
+p('pilot',2,"Écart prévu / réel", row(w('PRÉVU',f(8)),`<span class="gap"></span>`,w('RÉEL',f(8))), "Un écart mesuré entre PRÉVU et RÉEL.");
+p('pilot',1,"Courbe en S", L('COURBE',i=>at([70,48,38,56,62,40][i],[16,22,38,54,72,84][i])+f(13),i=>i%2?'a':''), "COURBE qui dessine un S.");
+p('pilot',2,"Tout est sous contrôle", col(w('CONTRÔLE',f(12)),a('TOUT',f(12))), "TOUT placé sous CONTRÔLE.");
+p('pilot',3,"Budget dans les clous", col(a('TTTTT',f(9)+'letter-spacing:.55em;margin-right:-.55em'),w('BUDGET',f(14)),a('TTTTT',f(9)+'letter-spacing:.55em;margin-right:-.55em;transform:rotate(180deg)')), "BUDGET entre deux rangées de clous.");
+p('pilot',2,"On track", col(a('ON',f(14)),w('TRACK',f(15)),`<span class="rail"></span>`), "ON posé sur TRACK.");
+p('pilot',1,"Signaux faibles", w('signaux',f(5)+'font-weight:400;opacity:.32'), "SIGNAUX à peine visibles.");
+p('pilot',1,"Risque majeur", w('RISQUE',f(22)+'font-weight:900'), "RISQUE en majuscules géantes.");
+p('pilot',1,"Remontée d'information", col(a('↑',f(10)),w('INFO',f(14)),w('INFO',f(10)+'opacity:.55'),w('INFO',f(7)+'opacity:.28')), "INFO qui monte.");
+p('pilot',2,"Escalade", sv(`<path class="k" d="M4 94 H16 V84 H26 V74.5 H36.5 V65 H47 V55.5 H57.5 V46 H68 V36.5 H78.5 V27 H96"/>`)+L('PROBLÈME',i=>at([10,21,31.2,41.8,52.2,62.8,73.2,87][i],[94,84,74.5,65,55.5,46,36.5,27][i]-6.5)+f(9),i=>i==7?'a':''), "PROBLÈME qui grimpe les marches.");
+p('pilot',1,"Météo projet", col(row(a('☀︎',f(11)),m('☁︎',f(11)),a('☂︎',f(11))),w('PROJET',f(14))), "PROJET sous la météo.");
+p('pilot',1,"Tendance à la hausse", w('TENDANCE',f(11)+'transform:rotate(-24deg)')+a('↗',at(84,20)+f(12)), "TENDANCE qui monte.");
+p('pilot',3,"Ressources sous tension", col(`<svg class="inl" viewBox="0 0 100 20" style="width:66cqw;height:12cqw" aria-hidden="true"><path class="k ka" d="M2 10 L14 2 L26 18 L38 2 L50 18 L62 2 L74 18 L86 2 L98 10"/></svg>`,w('RESSOURCES',f(8.5))), "RESSOURCES sous une ligne haute tension.");
+p('pilot',2,"Angle mort", sv(`<path class="k" style="stroke-width:3" d="M18 18 V82 H82"/><path class="k ka" d="M18 56 A26 26 0 0 0 44 82"/>`)+w('MORT',at(56,56)+f(12)), "MORT logé dans un angle.");
+p('pilot',1,"Zone de risque", `<div class="hatch">${w('RISQUE',f(12))}</div>`, "RISQUE dans une zone hachurée.");
+p('pilot',2,"Pic de charge", sv(`<path class="fs" d="M2 96 L30 60 L50 34 L70 60 L98 96Z"/>`)+w('CHARGE',at(50,24)+f(10)), "CHARGE au sommet d'un pic.");
+
+/* ---------- ÉQUIPE & GOUVERNANCE ---------- */
+p('team',1,"Chef de projet", col(a('♛︎',f(14)),w('PROJET',f(14))), "PROJET couronné.");
+p('team',1,"Top management", w('MANAGEMENT',at(50,11)+f(8.4)), "MANAGEMENT tout en haut.");
+p('team',1,"Travail en silos", row(...[0,1,2].map(()=>`<span class="silo">${w('ÉQUIPE',f(5.5),'vert')}</span>`)), "Chaque ÉQUIPE dans son silo.");
+p('team',2,"Équipe transverse", `<div class="row" style="gap:10cqw">${'<span class="colm"></span>'.repeat(3)}</div>`+a('ÉQUIPE',at(50,50)+f(14),'plate'), "ÉQUIPE qui traverse les colonnes.");
+p('team',1,"Stand-up meeting", w('MEETING',f(9.5),'vert'), "MEETING debout.");
+p('team',2,"One-to-one", row(w('ONE',f(14)),a('2',f(19)),w('ONE',f(14))), "ONE 2 (to) ONE.");
+p('team',2,"Feedback", row(w('FEED',f(16)),a('↩',f(16))), "FEED avec un retour (back).");
+p('team',1,"Montée en compétences", `<div class="row tight" style="align-items:flex-end">${L('COMPÉTENCES',i=>f((4+i*1.05).toFixed(2)))}</div>`, "COMPÉTENCES qui grandissent.");
+p('team',2,"Brainstorming", col(row(m('☁︎',f(13)),a('ϟ',f(14))),w('BRAIN',f(17))), "Un orage (storm) au-dessus de BRAIN.");
+p('team',2,"Résistance au changement", row(a('→',f(12)),tight(L('CHANGEMENT',i=>f(7.4)+`transform:skewX(${12+i*1.2}deg)`))), "CHANGEMENT qui s'arc-boute contre la poussée.");
+p('team',1,"Surcharge de travail", `<div class="col" style="gap:.5cqw">${[-4,5,-2,6,-3].map((r,i)=>w('TRAVAIL',f(9)+`transform:rotate(${r}deg) translateX(${i%2?3:-3}cqw)`)).join('')}</div>`, "Une pile de TRAVAIL.");
+p('team',3,"Top-down", w('TOP',f(26)+'transform:rotate(180deg)'), "TOP la tête en bas.");
+p('team',3,"Bottleneck (goulot d'étranglement)", sv(`<path class="k" style="stroke-width:2.5" d="M38 6 H62 V30 Q82 38 82 56 V94 H18 V56 Q18 38 38 30 Z"/>`)+a('NECK',at(50,18,'scaleX(.42)')+f(9))+m('FLUX',at(50,70)+f(12)), "NECK coincé dans le col d'une bouteille.");
+p('team',2,"Esprit d'équipe", `<div class="spirit"><span class="eyes">● ●</span>${w('ÉQUIPE',f(10))}</div>`, "ÉQUIPE en fantôme (esprit).");
+p('team',2,"Tour de table", `<span class="table"></span>`+circ('TABLE',36,12,()=>''), "TABLE qui fait le tour d'une table.");
+p('team',2,"Ordre du jour", row(...[...'JOUR'].map((c,i)=>`<span class="col" style="gap:2cqw">${w(c,f(16))}${a(String(i+1),f(6),'mono')}</span>`)), "JOUR numéroté dans l'ordre.");
+p('team',2,"Cellule de crise", `<div class="cells">${Array.from({length:9},(_,i)=>`<span>${i==4?a('CRISE',f(5.5)):''}</span>`).join('')}</div>`, "CRISE enfermée dans une cellule.");
+p('team',2,"Comité restreint", `<div class="narrow">${w('COMITÉ',f(12)+'letter-spacing:-.17em')}</div>`, "COMITÉ à l'étroit.");
+
+/* ---------- EXPRESSIONS ---------- */
+p('expr',1,"Avoir du pain sur la planche", col(w('PAIN',f(17)),`<span class="plank">${w('PLANCHE',f(6.5),'onwood')}</span>`), "PAIN sur PLANCHE.");
+p('expr',3,"Mettre la charrue avant les bœufs", row(w('CHARRUE',f(8.6)),a('·',f(8)),w('BŒUFS',f(8.6))), "CHARRUE placée avant BŒUFS.");
+p('expr',1,"Think outside the box", `<span class="box" style="position:absolute;left:12%;top:40%;width:46%;height:46%"></span>`+w('THINK',at(70,22)+f(13)), "THINK hors de la boîte.");
+p('expr',2,"Ne pas mettre tous ses œufs dans le même panier", row(...[0,1,2].map(()=>`<span class="col" style="gap:1cqw">${w('ŒUF',f(6.5))}<span class="basket"></span></span>`)), "Un ŒUF par panier.");
+p('expr',3,"Avoir le nez dans le guidon", tight(w('GUI',f(14)),a('NEZ',f(14)),w('DON',f(14))), "NEZ dans GUIDON.");
+p('expr',1,"Couper la poire en deux", row(w('POI',f(18)+'transform:rotate(-8deg)'),a('RE',f(18)+'transform:translateY(5cqw) rotate(9deg)')), "POIRE coupée en deux.");
+p('expr',1,"Retour à la case départ", `<span class="box" style="padding:7cqw 6cqw">${w('DÉPART',f(11))}</span>`+a('↺',at(80,20)+f(14)), "DÉPART dans une case, avec un retour.");
+p('expr',2,"Prendre du recul", col(w('RECUL',f(6)+'opacity:.3'),w('RECUL',f(10)+'opacity:.6'),w('RECUL',f(16))), "RECUL qui s'éloigne.");
+p('expr',2,"Être sur la même longueur d'onde", col(...[0,1].map(i=>`<span class="col" style="gap:1cqw">${w('ONDE',f(8),i?'a':'')}${wave}</span>`)), "Deux ONDES de même longueur.");
+p('expr',1,"Mettre les bouchées doubles", row(w('BOUCHÉES',f(11)),a('×2',f(11))), "BOUCHÉES fois deux.");
+p('expr',1,"Avancer à petits pas", row(w('pas pas pas pas',f(5)+'font-weight:500'),a('→',f(6))), "De tout petits PAS vers l'avant.");
+p('expr',3,"Le diable est dans les détails", tight(w('DÉ',f(14)),a('diable',f(5)+'margin-inline:1cqw;font-weight:600'),w('TAILS',f(14))), "Le petit diable caché dans DÉTAILS.");
+p('expr',2,"Faire table rase", tight(L('TABLE',i=>f(19)+`opacity:${[1,.55,.25,.1,.04][i]}`)), "TABLE effacée.");
+p('expr',1,"Sous pression", col(`<span class="weight">10 T</span>`,w('PRESSION',f(13)+'transform:scaleY(.42)')), "PRESSION écrasée sous un poids.");
+p('expr',1,"Droit au but", row(`<span class="arrow"></span>`,a('BUT',f(16))), "Une flèche droite vers BUT.");
+p('expr',1,"Tourner en rond", circ('TOURNER',33,12,i=>i==0?'a':'')+a('↻',at(50,50)+f(14)), "TOURNER disposé en rond.");
+p('expr',1,"Win-win (gagnant-gagnant)", row(a('WIN',f(17)),w('WIN',f(17))), "WIN des deux côtés.");
+p('expr',1,"Double check", col(w('CHECK',f(16)),a('✓✓',f(12))), "CHECK avec deux coches.");
+p('expr',1,"Plan B", row(w('PLAN',f(15)),`<span class="col" style="gap:1cqw">${m('A',f(9)+'text-decoration:line-through')}${a('B',f(15))}</span>`), "Le A est barré, reste le B.");
+p('expr',2,"Être dans la boucle", sv(`<path class="k ka" style="stroke-width:3" d="M70 22 A32 32 0 1 0 82 48"/><path class="fa" d="M64 16 L78 20 L70 32Z"/>`)+w('VOUS',at(50,52)+f(12)), "VOUS au centre d'une boucle.");
+p('expr',1,"Placer la barre haut", sv(`<g class="k"><line x1="14" y1="96" x2="14" y2="14"/><line x1="86" y1="96" x2="86" y2="14"/></g><line class="k ka" style="stroke-width:3" x1="10" y1="18" x2="90" y2="18"/>`)+w('BARRE',at(50,10)+f(8)), "BARRE posée tout en haut.");
+p('expr',1,"Remettre les compteurs à zéro", row(w('COMPTEURS',f(8.5)),a('= 0',f(10))), "COMPTEURS égal zéro.");
+p('expr',2,"Effet domino", `<div class="row tight" style="align-items:flex-end">${L('RETARDS',i=>f(12)+`transform-origin:100% 100%;transform:rotate(${Math.max(0,4-i)*16}deg)`)}</div>`, "Les lettres de RETARDS tombent l'une sur l'autre.");
+p('expr',2,"Mettre de l'eau dans son vin", tight(w('V',f(18)),w('EAU',f(11),'water'),w('IN',f(18))), "EAU dans VIN.");
+p('expr',2,"Se renvoyer la balle", col(a('→',f(10)),w('BALLE',f(15)),a('←',f(10))), "BALLE envoyée et renvoyée.");
+p('expr',2,"Faire boule de neige", row(`<span class="snow" style="width:9cqw"></span>`,`<span class="snow" style="width:16cqw"></span>`,`<span class="snow" style="width:30cqw">${w('NEIGE',f(6))}</span>`), "Une boule de NEIGE qui grossit.");
+p('expr',2,"Remettre à plat", col(w('PROJET',f(17)+'transform:scaleY(.2)'),`<span class="ul" style="width:62cqw"></span>`), "PROJET aplati.");
+p('expr',3,"Brûler les étapes", tight(L('ÉTAPES',i=>f(15)+(i%2?'opacity:.1':''))), "Une ÉTAPE sur deux a disparu.");
+p('expr',2,"Ça passe ou ça casse", col(w('PASSE',f(13)),m('ou',f(6)+'font-weight:500'),tight(a('CAS',f(13)+'transform:rotate(-8deg)'),a('SE',f(13)+'transform:translate(1cqw,3cqw) rotate(10deg)'))), "PASSE intact, CASSE brisé.");
+p('expr',2,"Chercher une aiguille dans une botte de foin", `<div class="hay">${Array.from({length:20},(_,i)=>i==13?a('aiguille',f(3.4)):m('FOIN',f(4.6))).join('')}</div>`, "Une aiguille cachée parmi le FOIN.");
+
+/* ---------- Illustrated scenes (override) ---------- */
+const S=i=>`<svg class="scene" viewBox="0 0 200 200" aria-hidden="true">${i}</svg>`;
+const T=(x,y,s,t,c='xi',ex='')=>`<text class="T ${c}" x="${x}" y="${y}" font-size="${s}" ${ex}>${t}</text>`;
+const r1=v=>Math.round(v*10)/10;
+const arcP=(cx,cy,r,a0,a1)=>{const p=a=>[r1(cx+r*Math.cos(a*Math.PI/180)),r1(cy+r*Math.sin(a*Math.PI/180))];const [x0,y0]=p(a0),[x1,y1]=p(a1);return `M${x0} ${y0} A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1} ${y1}`;};
+const cloud=(x,y,k=1,c='xt')=>{const cs=[[-16,4,13],[0,-6,17],[17,3,12],[6,8,12],[-6,9,11]].map(([dx,dy,r])=>[r1(x+dx*k),r1(y+dy*k),r1(r*k)]);
+  return cs.map(([a,b,r])=>`<circle class="n si" stroke-width="4.4" cx="${a}" cy="${b}" r="${r}"/>`).join('')+cs.map(([a,b,r])=>`<circle class="${c}" cx="${a}" cy="${b}" r="${r}"/>`).join('');};
+const grass=(y,xs)=>xs.map(x=>`<path class="n si" stroke-width="1.4" d="M${x-4} ${y} L${x-6} ${y-6} M${x} ${y} V${y-8} M${x+4} ${y} L${x+6} ${y-6}"/>`).join('');
+const ov=(ans,r,note)=>{const x=R.find(z=>z.ans===ans);if(!x){console.warn('missing',ans);return;}x.r=r;if(note)x.note=note;};
+
+/* Effet tunnel */
+ov("Effet tunnel",S((()=>{let s='';
+ s+=`<path class="xl si" d="M-4 120 L28 80 L50 94 L86 44 L118 72 L146 54 L204 108 V204 H-4Z"/>`;
+ s+=`<path class="xt si" stroke-width="1.4" d="M77 56 L86 44 L97 57 L91 61 L86 55 L82 60Z"/><path class="xt si" stroke-width="1.4" d="M139 61 L146 54 L154 62 L149 64 L146 60 L143 64Z"/>`;
+ s+=`<rect class="xh" x="-2" y="172" width="204" height="32"/>`;
+ s+=`<path class="xs si" d="M38 172 V118 A62 62 0 0 1 162 118 V172Z"/>`;
+ for(let k=1;k<8;k++){const t=Math.PI+k*Math.PI/8;s+=`<line class="si" stroke-width="1.4" x1="${r1(100+46*Math.cos(t))}" y1="${r1(118+46*Math.sin(t))}" x2="${r1(100+62*Math.cos(t))}" y2="${r1(118+62*Math.sin(t))}"/>`;}
+ [132,146,160].forEach(y=>{s+=`<line class="si" stroke-width="1.4" x1="38" y1="${y}" x2="54" y2="${y}"/><line class="si" stroke-width="1.4" x1="146" y1="${y}" x2="162" y2="${y}"/>`;});
+ s+=`<path class="xa si" stroke-width="1.4" d="M95 56 L105 56 L103 72 L97 72Z"/>`;
+ s+=`<path class="xi" d="M54 172 V118 A46 46 0 0 1 146 118 V172Z"/>`;
+ for(let j=1;j<=5;j++){const t=1-j*.16,r=r1(46*t),sy=r1(140-22*t),by=r1(140+32*t);s+=`<path class="n sx" stroke-width="${r1(1.6*t+.5)}" opacity="${r1(1-j*.13)}" d="M${r1(100-r)} ${by} V${sy} A${r} ${r} 0 0 1 ${r1(100+r)} ${sy} V${by}"/>`;}
+ s+=`<circle class="xa" cx="100" cy="139" r="10" opacity=".35"/><path class="xt" d="M95.5 146 V139.5 A4.5 4.5 0 0 1 104.5 139.5 V146Z"/>`;
+ [.95,.76,.6,.47,.37,.3].forEach(t=>{const y=r1(140+32*t),h=r1(26*t);s+=`<line class="sx" stroke-width="1.2" x1="${100-h}" y1="${y}" x2="${100+h}" y2="${y}"/>`;});
+ s+=`<path class="n sa" stroke-width="1.8" d="M78 172 L98.5 146 M122 172 L101.5 146"/>`;
+ s+=`<rect class="xa si" x="62" y="30" width="76" height="22" rx="2"/>`+T(100,41.5,14,'EFFET','xt');
+ s+=`<line class="si" x1="76" y1="52" x2="76" y2="58"/><line class="si" x1="124" y1="52" x2="124" y2="58"/>`;
+ return s;})()),"Un tunnel baptisé « EFFET ».");
+
+/* Clôture du projet */
+ov("Clôture du projet",S((()=>{let s=`<rect class="xs" x="-2" y="166" width="204" height="40"/>`;
+ s+=`<rect class="xh si" x="-6" y="98" width="212" height="9"/><rect class="xh si" x="-6" y="146" width="212" height="9"/>`;
+ for(let i=0;i<12;i++){const x=2+i*17;s+=`<path class="xt si" d="M${x} 172 V86 L${x+6} 76 L${x+12} 86 V172Z"/>`;}
+ s+=grass(172,[20,58,150,186]);
+ s+=`<circle class="xi" cx="80" cy="90" r="2"/><circle class="xi" cx="120" cy="90" r="2"/><path class="n si" stroke-width="1.4" d="M66 108 L80 90 M134 108 L120 90"/>`;
+ s+=`<rect class="xa si" x="56" y="106" width="88" height="30" rx="2"/>`+T(100,121.5,17,'PROJET','xt');
+ s+=`<path class="n si" stroke-width="3.4" d="M92 152 V145 A8 8 0 0 1 108 145 V152"/><rect class="xi" x="85" y="150" width="30" height="22" rx="3"/><circle class="xt" cx="100" cy="159" r="2.6"/><rect class="xt" x="99" y="160" width="2" height="6"/>`;
+ return s;})()),"Le panneau PROJET sur une clôture fermée par un cadenas.");
+
+/* Portefeuille de projets */
+ov("Portefeuille de projets",S((()=>{let s='';
+ [[-13,66,72],[0,100,62],[13,134,72]].forEach(([a,x,y])=>{s+=`<g transform="translate(${x} ${y}) rotate(${a})"><rect class="xt si" x="-28" y="-24" width="56" height="42" rx="3"/><rect class="xs" x="-27" y="-6" width="54" height="7"/><rect class="xa" x="-22" y="6" width="10" height="7" rx="1.5"/>${T(0,-14,9.5,'PROJET')}</g>`;});
+ s+=`<rect class="xa si" x="20" y="86" width="160" height="92" rx="10"/><rect class="n st" stroke-width="1.3" stroke-dasharray="4 3" x="27" y="93" width="146" height="78" rx="6"/>`;
+ s+=`<rect class="xa si" x="114" y="108" width="66" height="48" rx="9"/><rect class="n st" stroke-width="1.3" stroke-dasharray="4 3" x="119" y="113" width="56" height="38" rx="6"/><circle class="xt si" cx="134" cy="132" r="6"/><circle class="xa" cx="134" cy="132" r="2"/>`;
+ return s;})()),"Des PROJETS rangés dans un portefeuille.");
+
+/* Business case */
+ov("Business case",S(`<path class="n si" stroke-width="7" d="M76 70 V56 Q76 42 90 42 H110 Q124 42 124 56 V70"/><path class="n st" stroke-width="2" d="M76 70 V56 Q76 42 90 42 H110 Q124 42 124 56 V70"/>
+ <rect class="xs si" x="18" y="68" width="164" height="108" rx="9"/><path class="n si" stroke-width="1.6" d="M18 98 H182"/>
+ <rect class="xa si" x="48" y="90" width="20" height="15" rx="2"/><rect class="xa si" x="132" y="90" width="20" height="15" rx="2"/><rect class="xt" x="55" y="95" width="6" height="4"/><rect class="xt" x="139" y="95" width="6" height="4"/>
+ <path class="xi" d="M18 84 V77 Q18 68 27 68 H34 V74 H24 V84Z"/><path class="xi" d="M182 84 V77 Q182 68 173 68 H166 V74 H176 V84Z"/>
+ <rect class="xi" x="34" y="176" width="14" height="5" rx="1"/><rect class="xi" x="152" y="176" width="14" height="5" rx="1"/>
+ <rect class="xt si" x="48" y="118" width="104" height="36" rx="3"/><circle class="n si" stroke-width="1.4" cx="57" cy="136" r="3"/><path class="n si" stroke-width="1.2" d="M57 133 Q44 112 40 100"/>
+ ${T(106,136.5,15,'BUSINESS')}`),"BUSINESS dans une mallette (case).");
+
+/* Deadline */
+ov("Deadline",S((()=>{let s=`<rect class="xs" x="-2" y="170" width="204" height="40"/>`;
+ s+=`<path class="xl si" stroke-width="2.4" d="M46 174 V86 A54 54 0 0 1 154 86 V174Z"/><path class="n si" stroke-width="1" d="M56 168 V88 A44 44 0 0 1 144 88 V168"/>`;
+ s+=`<path class="n si" stroke-width="1.2" d="M134 52 L128 66 L136 76 L130 90"/>`;
+ s+=T(100,70,11,'R.I.P.','xm')+T(100,110,34,'LINE')+`<line class="si" stroke-width="1.2" x1="70" y1="132" x2="130" y2="132"/>`+T(100,146,11,'J – 0','xa');
+ s+=grass(174,[34,166,180]);
+ [[62,164],[72,160],[134,162]].forEach(([x,y])=>{s+=`<path class="n si" stroke-width="1.4" d="M${x} 174 V${y}"/><circle class="xa si" stroke-width="1" cx="${x}" cy="${y-3}" r="4"/>`;});
+ return s;})()),"LINE gravée sur une pierre tombale.");
+
+/* Projet phare */
+ov("Projet phare",S((()=>{let s=`<path class="xs" d="M100 58 L-4 26 V88Z M100 58 L204 26 V88Z"/>`;
+ s+=`<path class="xw" opacity=".75" d="M-2 168 Q18 160 38 168 T78 168 T118 168 T158 168 T198 168 V204 H-2Z"/>`;
+ s+=`<path class="xh si" d="M48 178 Q54 156 72 158 Q84 146 102 152 Q118 144 132 156 Q146 154 154 178Z"/>`;
+ s+=`<path class="xt si" d="M80 158 L88 74 H112 L120 158Z"/><path class="xi" d="M95 158 V148 A5 5 0 0 1 105 148 V158Z"/>`;
+ s+=`<rect class="xi" x="82" y="68" width="36" height="7"/><path class="n si" stroke-width="1.2" d="M84 68 V62 M92 68 V62 M100 68 V62 M108 68 V62 M116 68 V62 M84 62 H116"/>`;
+ s+=`<rect class="xs si" x="89" y="46" width="22" height="16"/><circle class="xa" cx="100" cy="54" r="5.5"/><path class="xi" d="M86 47 Q100 28 114 47Z"/><path class="n si" d="M100 34 V24"/>`;
+ [...'PROJET'].forEach((c,i)=>{s+=T(100,87+i*11,11,c,'xa');});
+ return s;})()),"Un phare qui porte le mot PROJET.");
+
+/* Économies d'échelle */
+ov("Économies d'échelle",S((()=>{let s='';const xl=y=>r1(56+(196-y)*22/188),xr=y=>r1(144-(196-y)*22/188);
+ s+=`<path class="n si" stroke-width="9" d="M56 196 L78 8 M144 196 L122 8"/><path class="n sd" stroke-width="5" d="M56 196 L78 8 M144 196 L122 8"/>`;
+ for(let y=180;y>12;y-=24){s+=`<path class="n si" stroke-width="6" d="M${xl(y)} ${y} H${xr(y)}"/><path class="n sd" stroke-width="2.6" d="M${xl(y)} ${y} H${xr(y)}"/>`;}
+ s+=`<rect class="xa si" x="26" y="86" width="148" height="28" rx="3"/>`+T(100,100.5,15,'ÉCONOMIES','xt');
+ [[84,50],[116,148]].forEach(([x,y])=>{s+=`<circle class="xs si" cx="${x}" cy="${y}" r="9"/>`+T(x,y+.5,10,'€','xa');});
+ return s;})()),"ÉCONOMIES sur une échelle.");
+
+/* Bottleneck */
+ov("Bottleneck (goulot d'étranglement)",S(`<path class="xs si" stroke-width="2.4" d="M84 20 H116 V30 H112 V58 Q144 70 146 102 V178 Q146 186 138 186 H62 Q54 186 54 178 V102 Q56 70 88 58 V30 H84Z"/>
+ <rect class="xa si" x="82" y="12" width="36" height="16" rx="2"/><path class="n si" stroke-width="1" d="M88 12 V28 M94 12 V28 M100 12 V28 M106 12 V28 M112 12 V28"/>
+ ${T(100,45,12,'NECK','xa','textLength="21" lengthAdjust="spacingAndGlyphs"')}
+ <path class="n st" stroke-width="4" opacity=".8" d="M66 108 V170"/>
+ <rect class="xt si" x="54" y="118" width="92" height="40"/>${T(100,138.5,18,'FLUX','xm')}`),"NECK coincé dans le goulot d'une bouteille.");
+
+/* Silos */
+ov("Travail en silos",S((()=>{let s=`<rect class="xs" x="-2" y="176" width="204" height="30"/>`;
+ for(let k=0;k<3;k++){const x=24+k*56;s+=`<rect class="xt si" x="${x}" y="64" width="40" height="112"/><path class="xh si" d="M${x-2} 64 Q${x+20} 38 ${x+42} 64Z"/><path class="n si" stroke-width="1" d="M${x+20} 44 V38"/>`;
+  [84,104,124,144,164].forEach(y=>{s+=`<line class="sx" stroke-width="1" x1="${x}" y1="${y}" x2="${x+40}" y2="${y}"/>`;});
+  [...'ÉQUIPE'].forEach((c,i)=>{s+=T(x+20,78+i*16.5,12.5,c);});}
+ return s;})()),"Chaque ÉQUIPE enfermée dans son silo.");
+
+/* Esprit d'équipe */
+ov("Esprit d'équipe",S(`<ellipse class="xl" cx="100" cy="188" rx="40" ry="5"/>
+ <path class="xs si" stroke-width="2.4" d="M48 172 V96 A52 52 0 0 1 152 96 V172 L135 160 L118 174 L100 160 L82 174 L65 160Z"/>
+ <path class="n si" d="M50 116 Q32 112 28 98 M150 116 Q168 112 172 98"/>
+ <ellipse class="xi" cx="82" cy="86" rx="6" ry="9"/><ellipse class="xi" cx="118" cy="86" rx="6" ry="9"/><circle class="xt" cx="84" cy="83" r="2"/><circle class="xt" cx="120" cy="83" r="2"/>
+ <ellipse class="xi" cx="100" cy="104" rx="5" ry="4"/>${T(100,134,22,'ÉQUIPE')}
+ <path class="n sa" stroke-width="1.6" d="M26 46 V58 M20 52 H32 M172 40 V50 M167 45 H177"/>`),"ÉQUIPE en fantôme : un esprit.");
+
+/* Tour de table */
+ov("Tour de table",S((()=>{const ch=(a,l)=>{const x=r1(100+80*Math.cos(a*Math.PI/180)),y=r1(104+52*Math.sin(a*Math.PI/180));return `<g transform="translate(${x} ${y})"><rect class="xt si" x="-14" y="-17" width="28" height="31" rx="5"/>${T(0,-1,18,l,'xa')}</g>`;};
+ let s=ch(180,'T')+ch(243,'A')+ch(297,'B')+ch(0,'L');
+ s+=`<path class="n si" stroke-width="4" d="M62 120 L60 162 M138 120 L140 162 M100 130 V170"/>`;
+ s+=`<ellipse class="xh si" cx="100" cy="111" rx="58" ry="26"/><ellipse class="xs si" cx="100" cy="104" rx="58" ry="26"/>`;
+ s+=`<rect class="xt si" stroke-width="1.2" x="70" y="96" width="20" height="13" transform="rotate(-10 80 102)"/><rect class="xt si" stroke-width="1.2" x="108" y="98" width="20" height="13" transform="rotate(8 118 104)"/><circle class="xa si" stroke-width="1.2" cx="100" cy="92" r="5"/>`;
+ s+=ch(90,'E');return s;})()),"Les lettres de TABLE sur les chaises autour de la table.");
+
+/* Cellule de crise */
+ov("Cellule de crise",S((()=>{let s=`<rect class="xl" x="0" y="0" width="200" height="200"/>`;
+ for(let r=0;r<15;r++){const y=r*14;s+=`<line class="sx" stroke-width="1" x1="0" y1="${y}" x2="200" y2="${y}"/>`;for(let x=(r%2?14:0);x<200;x+=28)s+=`<line class="sx" stroke-width="1" x1="${x}" y1="${y}" x2="${x}" y2="${y+14}"/>`;}
+ s+=`<rect class="xi si" stroke-width="3" x="36" y="46" width="128" height="100"/><rect class="xh si" x="30" y="146" width="140" height="9"/>`;
+ s+=T(100,94,34,'CRISE','xa');
+ [50,72,94,116,138,160].forEach(x=>{s+=`<rect class="xh" opacity=".85" x="${x-1.5}" y="46" width="3" height="100"/>`;});
+ s+=`<rect class="xh si" stroke-width="1" x="36" y="122" width="128" height="6"/>`;
+ return s;})()),"CRISE derrière les barreaux d'une cellule.");
+
+/* Pain sur la planche */
+ov("Avoir du pain sur la planche",S(`<path class="xd si" d="M24 128 H160 Q170 128 170 136 V140 H184 Q196 140 196 151 Q196 162 184 162 H170 V166 Q170 174 160 174 H24 Q14 174 14 164 V138 Q14 128 24 128Z"/>
+ <circle class="xt si" cx="185" cy="151" r="4"/><path class="n sdi" stroke-width="1" opacity=".35" d="M26 136 Q80 132 150 138 M24 168 Q90 164 158 168"/>
+ ${T(92,152,18,'PLANCHE','xdi')}
+ <path class="xs si" stroke-width="2.4" d="M34 130 Q32 62 100 58 Q168 62 166 130Z"/>
+ <path class="n sa" stroke-width="2.6" d="M62 80 Q76 70 92 74 M98 68 Q112 62 128 68 M132 80 Q142 76 150 86"/>
+ ${T(100,104,30,'PAIN')}<circle class="xs si" stroke-width="1" cx="176" cy="122" r="2.5"/><circle class="xs si" stroke-width="1" cx="22" cy="120" r="2"/>`),"PAIN posé sur une PLANCHE.");
+
+/* Œufs / paniers */
+ov("Ne pas mettre tous ses œufs dans le même panier",S((()=>{let s='';
+ [38,100,162].forEach(cx=>{s+=`<path class="n si" stroke-width="3" d="M${cx-24} 122 Q${cx} 58 ${cx+24} 122"/>`;
+  s+=`<ellipse class="xt si" cx="${cx}" cy="106" rx="15" ry="20"/>`+T(cx,102,8.5,'ŒUF');
+  s+=`<path class="xs si" d="M${cx-27} 120 H${cx+27} L${cx+20} 166 H${cx-20}Z"/>`;
+  [131,142,153].forEach(y=>{s+=`<line class="sx" stroke-width="1.2" x1="${cx-26}" y1="${y}" x2="${cx+26}" y2="${y}"/>`;});
+  [-14,-5,4,13].forEach(d=>{s+=`<line class="sx" stroke-width="1.2" x1="${cx+d}" y1="120" x2="${cx+d*0.78}" y2="166"/>`;});
+  s+=`<rect class="xa si" stroke-width="1.4" x="${cx-29}" y="117" width="58" height="6" rx="3"/>`;});
+ s+=`<line class="sx" x1="4" y1="168" x2="196" y2="168"/>`;
+ return s;})()),"Un seul ŒUF par panier.");
+
+/* Boule de neige */
+ov("Faire boule de neige",S((()=>{let s=`<path class="xs si" d="M-2 50 L202 172 V204 H-2Z"/>`;
+ s+=`<path class="n sx" stroke-width="3" stroke-dasharray="2 6" d="M10 52 L112 113"/>`;
+ [[30,6],[68,11],[136,30]].forEach(([x,r],i)=>{const cy=r1(51+0.6*x-r*1.17);s+=`<circle class="xt si" cx="${x}" cy="${cy}" r="${r}"/>`;
+  if(i==2)s+=`<path class="n sx" stroke-width="1.4" d="M118 82 Q124 76 132 76 M146 112 Q154 108 158 100 M120 106 Q126 114 134 116"/>`+T(136,92,13,'NEIGE','xa');});
+ s+=`<path class="n sa" stroke-width="2" d="M88 70 H100 M84 80 H98 M90 90 H102"/>`;
+ [[150,20],[176,40],[120,26],[184,14]].forEach(([x,y])=>{s+=`<path class="n sa" stroke-width="1.4" d="M${x-4} ${y} H${x+4} M${x} ${y-4} V${y+4} M${x-3} ${y-3} L${x+3} ${y+3} M${x+3} ${y-3} L${x-3} ${y+3}"/>`;});
+ return s;})()),"Une boule de NEIGE qui grossit en dévalant la pente.");
+
+/* Sous pression */
+ov("Sous pression",S(`<path class="n si" stroke-width="6" d="M84 56 V44 Q84 30 100 30 Q116 30 116 44 V56"/>
+ <path class="xi" d="M64 56 H136 L154 110 H46Z"/>${T(100,86,22,'10 T','xt')}
+ <text class="T xa" font-size="30" transform="translate(100 120) scale(1 .52)">PRESSION</text>
+ <path class="n si" d="M10 128 H190"/><path class="n sa" stroke-width="2.6" d="M30 112 L16 102 M28 121 L10 121 M170 112 L184 102 M172 121 L190 121"/>`),"PRESSION écrasée sous un poids de 10 tonnes.");
+
+/* Sunk cost */
+ov("Sunk cost (coût irrécupérable)",S(`<text class="T xi" font-size="48" transform="translate(100 104) rotate(-10)">COST</text>
+ <path class="xw" opacity=".78" d="M-2 104 Q23 96 48 104 T98 104 T148 104 T198 104 V204 H-2Z"/>
+ <path class="n st" stroke-width="1.6" opacity=".7" d="M20 140 Q30 136 40 140 M120 152 Q130 148 140 152 M70 172 Q80 168 90 172"/>
+ <circle class="n st" stroke-width="1.6" cx="78" cy="88" r="4"/><circle class="n st" stroke-width="1.6" cx="92" cy="76" r="3"/><circle class="n si" stroke-width="1.4" cx="128" cy="62" r="5"/><circle class="n si" stroke-width="1.4" cx="116" cy="50" r="3"/><circle class="n si" stroke-width="1.4" cx="122" cy="38" r="2"/>`),"COST qui coule à pic.");
+
+/* Low-hanging fruit */
+ov("Low-hanging fruit",S((()=>{let s=`<rect class="xs" x="-2" y="184" width="204" height="20"/>`;
+ s+=`<path class="xd si" d="M14 186 Q24 120 18 30 L34 30 Q38 120 38 186Z"/>`;
+ s+=`<path class="n si" stroke-width="9" d="M30 64 Q98 52 150 114"/><path class="n sd" stroke-width="5" d="M30 64 Q98 52 150 114"/>`;
+ [[50,54,-20],[72,50,8],[96,56,28],[116,72,44],[134,92,56],[60,70,40],[88,72,64],[24,24,-30],[40,18,20],[14,40,-60],[48,34,30]].forEach(([x,y,a])=>{s+=`<ellipse class="xs si" stroke-width="1.4" cx="${x}" cy="${y}" rx="11" ry="5.5" transform="rotate(${a} ${x} ${y})"/>`;});
+ [[30,10],[58,40],[104,44]].forEach(([x,y])=>{s+=`<circle class="xa si" stroke-width="1" cx="${x}" cy="${y}" r="5"/>`;});
+ s+=`<path class="n si" d="M150 114 V132"/><circle class="xa si" cx="150" cy="153" r="22"/><ellipse class="xs si" stroke-width="1.2" cx="160" cy="128" rx="8" ry="4" transform="rotate(-30 160 128)"/>`+T(150,155,11,'FRUIT','xt');
+ s+=grass(186,[70,110,186]);
+ return s;})()),"Un FRUIT qui pend tout près du sol.");
+
+/* Pipeline */
+ov("Pipeline de projets",S(`<path class="n si" stroke-width="3" d="M100 78 V58"/><circle class="n si" stroke-width="3.4" cx="100" cy="44" r="15"/><path class="n si" stroke-width="2" d="M100 29 V59 M85 44 H115 M89 33 L111 55 M111 33 L89 55"/><circle class="xa" cx="100" cy="44" r="4"/>
+ <rect class="xs si" x="6" y="78" width="188" height="46"/><path class="n st" stroke-width="3" opacity=".8" d="M10 86 H40 M160 86 H190"/>
+ <rect class="xh si" x="14" y="70" width="12" height="62" rx="2"/><rect class="xh si" x="174" y="70" width="12" height="62" rx="2"/>
+ <circle class="xi" cx="20" cy="76" r="1.8"/><circle class="xi" cx="20" cy="126" r="1.8"/><circle class="xi" cx="180" cy="76" r="1.8"/><circle class="xi" cx="180" cy="126" r="1.8"/>
+ <rect class="xt si" x="40" y="88" width="120" height="26" rx="3"/>${T(100,101.5,16,'PROJETS')}
+ <path class="n sa" stroke-width="2.6" d="M32 146 L40 152 L32 158 M46 146 L54 152 L46 158 M60 146 L68 152 L60 158"/>`),"PROJETS qui circulent dans un tuyau.");
+
+/* Feuille de route */
+ov("Feuille de route",S(`<path class="xt si" d="M20 52 L74 42 V156 L20 166Z"/><path class="xl si" d="M74 42 L128 52 V166 L74 156Z"/><path class="xt si" d="M128 52 L182 42 V156 L128 166Z"/>
+ <path class="n sx" stroke-width="1" d="M26 70 Q40 60 60 66 M26 80 Q44 72 66 78 M134 140 Q150 130 176 136 M136 150 Q154 142 176 146"/>
+ ${T(100,88,28,'ROUTE')}
+ <path class="n sa" stroke-width="3" stroke-dasharray="5 4" d="M30 150 C48 132 66 146 86 132 S120 118 142 134 S170 140 172 118"/>
+ <circle class="xi" cx="30" cy="150" r="4"/><path class="xa si" stroke-width="1.6" d="M172 118 C164 106 162 102 162 96 A10 10 0 0 1 182 96 C182 102 180 106 172 118Z"/><circle class="xt" cx="172" cy="96" r="3.5"/>`),"ROUTE tracée sur une carte pliée.");
+
+/* Enveloppe budgétaire */
+ov("Enveloppe budgétaire",S(`<path class="xl si" d="M20 84 L100 30 L180 84Z"/>
+ <rect class="xt si" x="38" y="40" width="124" height="70" rx="2"/>${T(100,64,24,'BUDGET','xa')}<path class="n sx" stroke-width="1.4" d="M54 86 H146 M54 96 H126"/>
+ <path class="xs si" d="M20 84 L100 130 L180 84 V166 H20Z"/><path class="n si" stroke-width="1.2" d="M20 166 L82 120 M180 166 L118 120"/>
+ <rect class="xt sa" stroke-width="1.4" stroke-dasharray="2 2" x="146" y="136" width="22" height="24"/>${T(157,148,11,'€','xa')}`),"BUDGET glissé dans une enveloppe.");
+
+/* Coupe budgétaire */
+ov("Coupe budgétaire",S(`<text class="T xi" font-size="40" transform="translate(56 120) rotate(-7)">BUD</text><text class="T xi" font-size="40" transform="translate(144 132) rotate(7)">GET</text>
+ <path class="n sa" stroke-width="2" stroke-dasharray="5 4" d="M100 82 V196"/>
+ <path class="xh si" d="M90 28 L106 76 L100 78Z"/><path class="xh si" d="M110 28 L94 76 L100 78Z"/>
+ <circle class="xs si" stroke-width="2.6" cx="85" cy="20" r="9"/><circle class="xs si" stroke-width="2.6" cx="115" cy="20" r="9"/><circle class="xi" cx="100" cy="50" r="2.6"/>`),"BUDGET coupé en deux aux ciseaux.");
+
+/* Météo projet */
+ov("Météo projet",S((()=>{let s=`<circle class="xa" cx="62" cy="58" r="18"/>`;
+ for(let k=0;k<8;k++){const a=k*Math.PI/4;s+=`<line class="sa" stroke-width="3" x1="${r1(62+24*Math.cos(a))}" y1="${r1(58+24*Math.sin(a))}" x2="${r1(62+32*Math.cos(a))}" y2="${r1(58+32*Math.sin(a))}"/>`;}
+ s+=cloud(122,74,1.3);
+ [[104,110],[122,118],[140,108],[114,130]].forEach(([x,y])=>{s+=`<path class="xa" d="M${x} ${y} q-4 6 0 9 q4 -3 0 -9Z"/>`;});
+ s+=T(100,164,32,'PROJET');return s;})()),"La météo au-dessus du PROJET.");
+
+/* Chef de projet */
+ov("Chef de projet",S(`<path class="xa si" d="M52 94 L44 44 L74 70 L100 30 L126 70 L156 44 L148 94Z"/>
+ <circle class="xa si" cx="44" cy="42" r="5"/><circle class="xa si" cx="100" cy="27" r="5"/><circle class="xa si" cx="156" cy="42" r="5"/>
+ <rect class="xi" x="50" y="88" width="100" height="14" rx="2"/><circle class="xt" cx="74" cy="95" r="3"/><rect class="xs" x="96" y="91" width="8" height="8" transform="rotate(45 100 95)"/><circle class="xt" cx="126" cy="95" r="3"/>
+ ${T(100,144,32,'PROJET')}`),"PROJET couronné.");
+
+/* Projets gelés */
+ov("Projets gelés",S(`<ellipse class="xc" opacity=".6" cx="96" cy="178" rx="78" ry="8"/>
+ <path class="xc se" d="M144 72 L172 46 V146 L144 172Z"/><path class="xi" opacity=".08" d="M144 72 L172 46 V146 L144 172Z"/>
+ <path class="xc se" d="M34 72 L62 46 H172 L144 72Z"/><path class="xt" opacity=".45" d="M34 72 L62 46 H172 L144 72Z"/>
+ <rect class="xc se" x="34" y="72" width="110" height="100"/><path class="n st" stroke-width="3" opacity=".9" d="M44 112 V82 H80"/>
+ ${T(89,126,19,'PROJETS','xci')}
+ <path class="n sm" stroke-width="1.4" d="M186 20 V32 M180 26 H192 M182 22 L190 30 M190 22 L182 30 M18 30 V40 M13 35 H23"/>`),"PROJETS pris dans un bloc de glace.");
+
+/* Zone de risque */
+ov("Zone de risque",S(`<defs><pattern id="hzp" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="12" class="xa"/><rect x="6" width="6" height="12" class="xi"/></pattern></defs>
+ <rect fill="url(#hzp)" class="si" stroke-width="1.4" x="-10" y="12" width="220" height="16" transform="rotate(-6 100 20)"/>
+ <rect fill="url(#hzp)" class="si" stroke-width="1.4" x="-10" y="174" width="220" height="16" transform="rotate(5 100 182)"/>
+ <path class="xt si" stroke-width="5" d="M100 42 L144 118 H56Z"/>${T(100,92,34,'!')}
+ ${T(100,148,28,'RISQUE')}`),"RISQUE dans une zone balisée.");
+
+/* Pic de charge */
+ov("Pic de charge",S(`<path class="n sx" stroke-width="1" stroke-dasharray="3 4" d="M0 60 H200 M0 100 H200 M0 140 H200"/>
+ <path class="xs si" d="M-2 182 L56 116 L78 130 L112 44 L148 108 L166 96 L202 134 V204 H-2Z"/>
+ <path class="xt si" stroke-width="1.4" d="M98 80 L112 44 L127 74 L119 70 L113 80 L106 72Z"/>
+ <path class="n si" d="M112 44 V12"/><path class="xa si" stroke-width="1.4" d="M112 12 H172 L164 22 L172 32 H112Z"/>${T(139,22,11,'CHARGE','xt')}`),"CHARGE plantée au sommet du pic.");
+
+/* Lancement du projet */
+ov("Lancement du projet",S(`<path class="n sm" stroke-width="1.6" stroke-dasharray="4 5" d="M30 182 Q56 150 84 120"/>${cloud(36,172,.85,'xl')}
+ <g transform="translate(116 86) rotate(42)">
+  <path class="xa" d="M-12 24 Q0 70 12 24Z"/><path class="xt" d="M-6 24 Q0 48 6 24Z"/>
+  <path class="xa si" d="M-17 2 L-32 30 L-15 24Z"/><path class="xa si" d="M17 2 L32 30 L15 24Z"/>
+  <path class="xt si" d="M0 -64 Q22 -36 18 24 H-18 Q-22 -36 0 -64Z"/><circle class="xs si" cy="-32" r="7"/>
+  <text class="T xa" font-size="11" transform="translate(0 4) rotate(-90)">PROJET</text>
+ </g>`),"PROJET qui décolle comme une fusée.");
+
+/* Kick-off */
+ov("Kick-off",S(`${T(100,50,44,'KICK','xm')}
+ <rect class="xt si" x="64" y="88" width="72" height="98" rx="8"/><circle class="xh si" stroke-width="1" cx="100" cy="98" r="3"/><circle class="xh si" stroke-width="1" cx="100" cy="176" r="3"/>
+ <rect class="xi" x="88" y="110" width="24" height="54" rx="4"/><rect class="xh si" x="91" y="136" width="18" height="26" rx="4"/>
+ ${T(124,118,8,'ON','xm')}${T(124,156,9,'OFF','xa')}`),"KICK sur un interrupteur en position OFF.");
+
+/* Roadmap */
+ov("Roadmap",S((()=>{let s=`<rect class="xs" x="-2" y="80" width="204" height="124"/><path class="xl si" stroke-width="1.4" d="M-2 84 Q30 64 60 80 Q100 60 140 78 Q170 64 202 80 V86 H-2Z"/>`;
+ s+=`<path class="xi" d="M95 82 H105 L178 204 H22Z"/>`;
+ [[88,2,5],[100,3,8],[118,4,12]].forEach(([y,w,h])=>{s+=`<rect class="xt" x="${100-w/2}" y="${y}" width="${w}" height="${h}"/>`;});
+ s+=`<text class="T xt" font-size="48" transform="translate(100 166) scale(1 .5)">MAP</text>`;
+ s+=`<path class="n si" stroke-width="3" d="M28 120 V74"/><rect class="xa si" x="8" y="54" width="44" height="22" rx="2"/>`+T(30,65,14,'→','xt');
+ return s;})()),"MAP peint sur la route.");
+
+/* Brainstorming */
+ov("Brainstorming",S((()=>{let s=cloud(100,46,1.35,'xh');
+ s+=`<path class="xa si" stroke-width="1.4" d="M104 64 L90 92 H101 L92 116 L120 82 H108 L116 64Z"/>`;
+ [[66,72],[78,84],[136,72],[148,84]].forEach(([x,y])=>{s+=`<path class="n sa" stroke-width="2" d="M${x} ${y} l-3 7"/>`;});
+ s+=`<path class="xs si" d="M42 152 Q40 118 72 118 Q86 108 100 118 Q114 108 128 118 Q160 118 158 152 Q160 184 128 182 Q114 190 100 182 Q86 190 72 182 Q40 184 42 152Z"/>`;
+ s+=`<path class="n sx" stroke-width="1.6" d="M56 132 Q66 126 74 134 M126 130 Q136 124 146 132 M54 172 Q64 166 72 174 M128 172 Q138 166 146 172 M100 120 V128 M100 176 V182"/>`;
+ s+=T(100,152,26,'BRAIN');return s;})()),"Un orage (storm) au-dessus de BRAIN.");
+
+/* Feu vert */
+ov("Feu vert",S(`<rect class="xh si" x="94" y="156" width="12" height="44"/>
+ <rect class="xi" x="60" y="10" width="80" height="150" rx="14"/>
+ <circle class="xr" opacity=".25" cx="100" cy="42" r="20"/><circle class="xh" opacity=".45" cx="100" cy="85" r="20"/>
+ <circle class="xg" opacity=".3" cx="100" cy="128" r="28"/><circle class="xg" cx="100" cy="128" r="20"/>${T(100,129,14,'FEU','xt')}`),"Le FEU allumé au vert.");
+
+/* Indicateur au rouge */
+ov("Indicateur au rouge",S((()=>{let s=`<path class="n sg" stroke-width="16" d="${arcP(100,124,66,180,250)}"/><path class="n sx" stroke-width="16" d="${arcP(100,124,66,252,298)}"/><path class="n sr" stroke-width="16" d="${arcP(100,124,66,300,360)}"/>`;
+ for(let a=180;a<=360;a+=18){const t=a*Math.PI/180;s+=`<line class="si" stroke-width="1.6" x1="${r1(100+48*Math.cos(t))}" y1="${r1(124+48*Math.sin(t))}" x2="${r1(100+55*Math.cos(t))}" y2="${r1(124+55*Math.sin(t))}"/>`;}
+ const t=338*Math.PI/180;s+=`<line class="si" stroke-width="4" x1="100" y1="124" x2="${r1(100+56*Math.cos(t))}" y2="${r1(124+56*Math.sin(t))}"/><circle class="xi" cx="100" cy="124" r="7"/>`;
+ s+=T(100,102,9,'KPI','xm')+T(100,164,17,'INDICATEUR','xr');return s;})()),"L'aiguille de l'INDICATEUR est dans le rouge.");
+
+/* Placer la barre haut */
+ov("Placer la barre haut",S((()=>{let s='';
+ [26,166].forEach(x=>{s+=`<rect class="xh si" x="${x}" y="18" width="8" height="160"/><rect class="xi" x="${x-12}" y="176" width="32" height="6" rx="2"/>`;for(let y=60;y<170;y+=14)s+=`<circle class="xi" cx="${x+4}" cy="${y}" r="1.4"/>`;});
+ s+=`<rect class="xs si" x="44" y="150" width="112" height="28" rx="6"/><path class="n sx" stroke-width="1.2" d="M72 150 V178 M100 150 V178 M128 150 V178"/>`;
+ s+=`<rect class="xt si" x="30" y="30" width="140" height="18" rx="2"/><rect class="xa" x="31" y="31" width="18" height="16"/><rect class="xa" x="151" y="31" width="18" height="16"/>`+T(100,39.5,15,'BARRE');
+ s+=`<path class="n sa" stroke-width="2.4" d="M100 128 V72 M92 80 L100 72 L108 80"/>`;return s;})()),"La BARRE posée tout en haut des montants.");
+
+/* Droit au but */
+ov("Droit au but",S((()=>{let s='';
+ for(let x=122;x<190;x+=10)s+=`<line class="sx" stroke-width="1" x1="${x}" y1="56" x2="${x}" y2="150"/>`;
+ for(let y=66;y<150;y+=10)s+=`<line class="sx" stroke-width="1" x1="112" y1="${y}" x2="190" y2="${y}"/>`;
+ s+=`<path class="n si" stroke-width="5" d="M112 150 V56 H190 V150"/>`+T(152,104,30,'BUT','xa');
+ s+=`<path class="n si" stroke-width="1.5" d="M0 150 H200"/><circle class="xt si" cx="22" cy="104" r="11"/><path class="xi" d="M22 99 L27 103 L25 109 H19 L17 103Z"/>`;
+ s+=`<path class="n si" stroke-width="4" d="M38 104 H96"/><path class="xi" d="M94 94 L110 104 L94 114Z"/>`;return s;})()),"Une flèche tout droit dans le BUT.");
+
+/* Ressources sous tension */
+ov("Ressources sous tension",S(`<path class="n si" stroke-width="1.4" d="M-2 70 Q30 86 58 56 M142 56 Q170 86 202 70 M-2 94 Q34 108 66 80 M134 80 Q166 108 202 94"/>
+ <path class="n si" stroke-width="2.4" d="M78 192 L94 30 H106 L122 192"/><path class="n si" stroke-width="1.3" d="M80 176 L118 150 L84 130 L114 104 L88 84 L110 64 L92 44"/>
+ <path class="n si" stroke-width="3" d="M56 52 H144 M64 76 H136"/><path class="n si" stroke-width="2" d="M58 52 V58 M142 52 V58 M66 76 V82 M134 76 V82"/>
+ <path class="xa si" stroke-width="1.2" d="M100 96 L112 116 H88Z"/><path class="xi" d="M101 100 L96 108 H100 L98 114 L104 105 H100Z"/>
+ <rect class="xt si" stroke-width="1.4" x="12" y="138" width="176" height="30" rx="3"/>${T(100,153.5,18,'RESSOURCES')}`),"RESSOURCES sous des lignes à haute tension.");
+
+/* Top management */
+ov("Top management",S((()=>{let s=`<rect class="xa si" x="24" y="12" width="152" height="26" rx="2"/>`+T(100,25.5,14,'MANAGEMENT','xt');
+ s+=`<path class="n si" d="M50 38 V52 M150 38 V52"/><rect class="xs si" x="40" y="52" width="120" height="152"/>`;
+ for(let r=0;r<8;r++)for(let c=0;c<5;c++)s+=`<rect class="${r==0?'xa':'xt'}" x="${50+c*21}" y="${60+r*17}" width="12" height="10"/>`;
+ s+=`<rect class="xi" x="90" y="190" width="20" height="14"/>`;return s;})()),"MANAGEMENT tout en haut de l'immeuble.");
+
+/* Think outside the box */
+ov("Think outside the box",S(`<path class="xs si" d="M66 88 H164 L172 58 H74Z"/><path class="xi" d="M40 104 L66 88 H164 L138 104Z"/>
+ <path class="xs si" d="M40 104 L66 88 L46 66 L18 82Z"/>
+ <rect class="xs si" x="40" y="104" width="98" height="72"/><path class="xh si" d="M138 104 L164 88 V160 L138 176Z"/><rect class="xt" opacity=".7" x="80" y="104" width="18" height="22"/>
+ <path class="n sa" stroke-width="2" stroke-dasharray="4 4" d="M96 92 Q90 60 84 48"/>
+ <text class="T xa" font-size="28" transform="translate(70 34) rotate(-10)">THINK</text>`),"THINK sort de la boîte.");
+
+/* Retour à la case départ */
+ov("Retour à la case départ",S((()=>{let s='';
+ for(let i=0;i<5;i++){const x=12+i*36;s+=`<rect class="${i==0?'xa':i%2?'xt':'xs'} si" x="${x}" y="132" width="34" height="36"/>`;if(i)s+=T(x+8,140,7,i+1,'xm','style="font-family:var(--f-mono);font-weight:500"');}
+ s+=T(29,150,8.5,'DÉPART','xt');
+ s+=`<ellipse class="xi" cx="173" cy="150" rx="11" ry="3.5"/><path class="xi" d="M165 150 Q166 126 173 126 Q180 126 181 150Z"/><circle class="xi" cx="173" cy="120" r="7"/>`;
+ s+=`<path class="n sa" stroke-width="3" stroke-dasharray="6 5" d="M168 104 Q104 20 34 118"/><path class="xa" d="M25 108 L33 128 L43 112Z"/>`;return s;})()),"Le pion repart sur la case DÉPART.");
+
+/* Faire table rase : ajoute une gomme */
+{const x=R.find(z=>z.ans==="Faire table rase");x.r+=S(`<g transform="translate(166 146) rotate(-28)"><rect class="xs si" x="-22" y="-11" width="44" height="22" rx="3"/><rect class="xa si" x="-22" y="-11" width="17" height="22" rx="3"/></g><circle class="xm" cx="140" cy="166" r="2"/><circle class="xm" cx="150" cy="172" r="1.5"/><circle class="xm" cx="132" cy="174" r="1.6"/>`);}
+
+/* Eau dans son vin */
+ov("Mettre de l'eau dans son vin",S(`<path class="xv" d="M64 70 H136 Q134 106 100 114 Q66 106 64 70Z"/>${T(100,90,24,'VIN','xt')}
+ <path class="n si" stroke-width="2.4" d="M62 32 H138 Q142 104 100 116 Q58 104 62 32Z"/><path class="n sx" stroke-width="3" d="M70 40 Q70 58 72 66"/>
+ <path class="n si" stroke-width="3" d="M100 116 V168"/><ellipse class="xt si" cx="100" cy="172" rx="28" ry="6"/>
+ <path class="xw si" stroke-width="1.6" d="M166 12 C158 26 148 34 148 46 A18 18 0 0 0 184 46 C184 34 174 26 166 12Z"/>${T(166,48,11,'EAU')}
+ <path class="xw" d="M134 10 C131 15 128 18 128 22 A6 6 0 0 0 140 22 C140 18 137 15 134 10Z"/><path class="xw" d="M116 20 C114 23 112 25 112 28 A4 4 0 0 0 120 28 C120 25 118 23 116 20Z"/>`),"Des gouttes d'EAU qui tombent dans le VIN.");
+
+/* Botte de foin */
+ov("Chercher une aiguille dans une botte de foin",S((()=>{let s=`<path class="n si" stroke-width="1.5" d="M0 178 H200"/><path class="xd si" d="M22 178 Q28 66 100 58 Q172 66 178 178Z"/>`;
+ for(let i=0;i<46;i++){const x=40+(i*37)%122,y=82+(i*53)%92,a=(i*47)%60-30;s+=`<line class="sdi" stroke-width="1.2" opacity=".35" x1="${x-6}" y1="${y}" x2="${x+6}" y2="${y}" transform="rotate(${a} ${x} ${y})"/>`;}
+ s+=T(100,124,30,'FOIN','xdi');
+ s+=`<path class="n sa" stroke-width="2.4" d="M132 160 L158 148"/><ellipse class="n sa" stroke-width="1.4" cx="160" cy="147" rx="3" ry="1.6" transform="rotate(-24 160 147)"/>`;
+ s+=`<path class="xa" d="M170 132 L172 138 L178 140 L172 142 L170 148 L168 142 L162 140 L168 138Z"/>`;return s;})()),"Une aiguille cachée dans la botte de FOIN.");
+
+/* Portefeuille équilibré */
+ov("Portefeuille équilibré",S((()=>{const fold=x=>`<path class="xt si" stroke-width="1.4" d="M${x-12} 106 H${x-4} L${x-1} 103 H${x+12} V122 H${x-12}Z"/>`;
+ let s=`<path class="xi" d="M70 184 H130 L120 172 H80Z"/><rect class="xh si" x="96" y="62" width="8" height="112"/>`;
+ s+=`<path class="n si" stroke-width="1.2" d="M30 64 L12 122 M30 64 L48 122 M170 64 L152 122 M170 64 L188 122"/>`;
+ s+=fold(24)+fold(36)+fold(164)+fold(176);
+ s+=`<path class="xs si" d="M6 120 H54 Q52 140 30 140 Q8 140 6 120Z"/><path class="xs si" d="M146 120 H194 Q192 140 170 140 Q148 140 146 120Z"/>`;
+ s+=`<rect class="xa si" x="18" y="46" width="164" height="20" rx="3"/>`+T(100,56.5,12.5,'PORTEFEUILLE','xt')+`<path class="xi" d="M92 46 L100 34 L108 46Z"/>`;return s;})()),"PORTEFEUILLE sur le fléau d'une balance à l'équilibre.");
+
+/* Phase de cadrage */
+ov("Phase de cadrage",S(`<path class="n si" stroke-width="1.4" d="M60 40 L100 16 L140 40"/><circle class="xi" cx="100" cy="15" r="3"/>
+ <rect class="xa si" x="20" y="38" width="160" height="134" rx="2"/><rect class="xs si" stroke-width="1" x="30" y="48" width="140" height="114"/><rect class="xt si" stroke-width="1" x="38" y="56" width="124" height="98"/>
+ <circle class="xt" cx="25" cy="43" r="3"/><circle class="xt" cx="175" cy="43" r="3"/><circle class="xt" cx="25" cy="167" r="3"/><circle class="xt" cx="175" cy="167" r="3"/>
+ ${T(100,105,32,'PHASE')}`),"PHASE posée dans un cadre.");
+
+/* Cash flow */
+ov("Cash flow",S((()=>{let s=`<path class="xw" opacity=".5" d="M-2 110 Q23 100 48 110 T98 110 T148 110 T198 110 V204 H-2Z"/><path class="xw" opacity=".6" d="M-2 150 Q23 140 48 150 T98 150 T148 150 T198 150 V204 H-2Z"/>`;
+ [[34,104,-12,'C'],[78,118,8,'A'],[122,102,-6,'S'],[166,120,10,'H']].forEach(([x,y,a,l])=>{s+=`<g transform="translate(${x} ${y}) rotate(${a})"><rect class="xs si" x="-20" y="-13" width="40" height="26" rx="2"/><rect class="n sa" stroke-width="1" x="-16" y="-9" width="32" height="18"/>${T(0,.5,17,l)}</g>`;});
+ s+=`<path class="n sa" stroke-width="2.4" d="M60 60 H140 M130 52 L140 60 L130 68"/>`;return s;})()),"Les billets C-A-S-H emportés par le courant (flow).");
+
+/* Couper la poire en deux */
+ov("Couper la poire en deux",S((()=>{const half='M0 -48 C-12 -48 -16 -32 -18 -18 C-40 -4 -46 38 0 52 Z';
+ return `<g transform="translate(88 104) rotate(-8) scale(1.2)"><path class="n si" stroke-width="3" d="M0 -48 Q2 -58 8 -64"/><ellipse class="xa si" stroke-width="1.2" cx="14" cy="-58" rx="8" ry="4" transform="rotate(-20 14 -58)"/><path class="xs si" d="${half}"/><ellipse class="xi" cx="-6" cy="14" rx="2.4" ry="4"/>${T(-20,26,16,'POI')}</g>
+ <g transform="translate(114 116) rotate(10) scale(1.2)"><g transform="scale(-1 1)"><path class="xs si" d="${half}"/></g><ellipse class="xi" cx="6" cy="14" rx="2.4" ry="4"/>${T(20,26,17,'RE')}</g>
+ <path class="n sa" stroke-width="1.6" stroke-dasharray="4 4" d="M102 20 V186"/>`;})()),"POIRE coupée en deux.");
+
+
+/* ---------- App ---------- */
+const TH={all:'Tous',cycle:'Cycle de projet',ppm:'Portefeuille',pilot:'Pilotage & reporting',team:'Équipe & gouvernance',expr:'Expressions'};
+const code=i=>'R-'+String(i+1).padStart(3,'0');
+const dots=lv=>'●'.repeat(lv)+'○'.repeat(3-lv);
+let order=R.map((_,i)=>i), fTh='all', fLv=0, revealAll=false;
+const opened=new Set();
+const $=id=>document.getElementById(id);
+
+document.getElementById('lede').textContent=`${R.length} expressions du métier cachées dans des jeux de lettres. Touchez un rébus pour voir la réponse, ou lancez le quiz pour l'animer en atelier.`;
+
+function visible(){return order.filter(i=>(fTh==='all'||R[i].th===fTh)&&(!fLv||R[i].lv===fLv));}
+function renderThemes(){
+  $('themes').innerHTML=Object.keys(TH).map(k=>{
+    const n=R.filter(x=>(k==='all'||x.th===k)&&(!fLv||x.lv===fLv)).length;
+    return `<button class="chip" data-th="${k}" aria-pressed="${k===fTh}">${TH[k]}<small>${n}</small></button>`}).join('');
+}
+function ansHTML(i,show){const x=R[i];return show?`${x.ans}${x.note?`<small>${x.note}</small>`:''}`:'Touchez pour révéler';}
+function renderGrid(){
+  const v=visible();
+  $('count').textContent=`${v.length} rébus affiché${v.length>1?'s':''}`;
+  $('grid').innerHTML=v.length?v.map(i=>{const x=R[i],show=revealAll||opened.has(i);
+    return `<article class="card"><button class="tilebtn" data-i="${i}" aria-expanded="${show}" aria-label="Rébus ${code(i)} : ${show?'masquer':'révéler'} la réponse"><div class="t">${x.r}</div></button>
+    <div class="meta"><span>${code(i)}</span><span>${TH[x.th]}</span><span class="lv" title="Niveau ${x.lv}">${dots(x.lv)}</span></div>
+    <p class="ans ${show?'':'hid'}">${ansHTML(i,show)}</p></article>`}).join(''):`<p>Aucun rébus pour ce filtre.</p>`;
+}
+function render(){renderThemes();renderGrid();}
+
+$('themes').addEventListener('click',e=>{const b=e.target.closest('[data-th]');if(!b)return;fTh=b.dataset.th;render();});
+$('levels').addEventListener('click',e=>{const b=e.target.closest('[data-lv]');if(!b)return;fLv=+b.dataset.lv;
+  [...$('levels').children].forEach(x=>x.setAttribute('aria-pressed',x===b));render();});
+$('grid').addEventListener('click',e=>{const b=e.target.closest('.tilebtn');if(!b)return;const i=+b.dataset.i;
+  opened.has(i)?opened.delete(i):opened.add(i);
+  const show=revealAll||opened.has(i);const card=b.closest('.card');const an=card.querySelector('.ans');
+  an.className='ans '+(show?'':'hid');an.innerHTML=ansHTML(i,show);
+  b.setAttribute('aria-expanded',show);b.setAttribute('aria-label',`Rébus ${code(i)} : ${show?'masquer':'révéler'} la réponse`);});
+$('shuffle').addEventListener('click',()=>{for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}renderGrid();});
+$('revealAll').addEventListener('click',e=>{revealAll=!revealAll;if(!revealAll)opened.clear();e.currentTarget.setAttribute('aria-pressed',revealAll);e.currentTarget.textContent=revealAll?'Masquer tout':'Révéler tout';renderGrid();});
+
+/* ---------- Quiz ---------- */
+const DUR=30000;
+let Q=[],qi=0,res=[],revealed=false,timerOn=true,t0=0,tick=null,ended=false;
+function qStart(){
+  Q=visible();if(!Q.length)return;qi=0;res=new Array(Q.length).fill(null);ended=false;
+  $('quiz').hidden=false;document.documentElement.style.overflow='hidden';qShow();
+}
+function qClose(){stopT();$('quiz').hidden=true;document.documentElement.style.overflow='';
+  if(document.fullscreenElement){document.exitFullscreen().catch(()=>{});} }
+function scores(){$('qok').textContent='✓ '+res.filter(x=>x===true).length;$('qko').textContent='✗ '+res.filter(x=>x===false).length;}
+function stopT(){clearInterval(tick);tick=null;}
+function startT(){stopT();const bar=$('qbar');if(!timerOn||revealed){bar.style.transform='scaleX(1)';return;}
+  t0=Date.now();bar.style.transform='scaleX(1)';
+  tick=setInterval(()=>{const r=Math.max(0,1-(Date.now()-t0)/DUR);bar.style.transform=`scaleX(${r})`;if(r<=0){stopT();qReveal();}},100);}
+function qShow(){
+  ended=false;const i=Q[qi],x=R[i];revealed=res[qi]!==null;
+  $('qpos').textContent=`Rébus ${qi+1} / ${Q.length} · ${code(i)} · ${dots(x.lv)}`;scores();
+  $('qtimer').classList.toggle('off',!timerOn);
+  $('stage').innerHTML=`<div class="qtile"><div class="t">${x.r}</div></div>
+   <div class="qans ${revealed?'':'hid'}" id="qans">${revealed?`${x.ans}<small>${x.note}</small>`:`${TH[x.th]}`}</div>
+   <div class="qctl" id="qctl"></div><p class="kbd">Espace : révéler · ← → : naviguer · Échap : fermer</p>`;
+  qCtl();startT();
+}
+function qCtl(){
+  const done=res[qi]!==null;
+  $('qctl').innerHTML=`<button class="btn" data-q="prev" ${qi===0?'disabled':''}>← Précédent</button>`+
+    (!revealed?`<button class="btn primary" data-q="reveal">Révéler la réponse</button>`:
+     done?`<button class="btn primary" data-q="next">${qi===Q.length-1?'Voir le score':'Suivant →'}</button>`:
+     `<button class="btn ok" data-q="yes">Trouvé</button><button class="btn ko" data-q="no">Pas trouvé</button>`)+
+    (!revealed?`<button class="btn" data-q="next">Passer →</button>`:'');
+}
+function qReveal(){if(revealed)return;revealed=true;stopT();const x=R[Q[qi]];
+  const el=$('qans');el.className='qans';el.innerHTML=`${x.ans}<small>${x.note}</small>`;qCtl();}
+function qNext(){if(qi<Q.length-1){qi++;qShow();}else qEnd();}
+function qPrev(){if(qi>0){qi--;qShow();}}
+function qJudge(v){res[qi]=v;scores();qNext();}
+function qEnd(){
+  stopT();ended=true;const ok=res.filter(x=>x===true).length;
+  const miss=Q.filter((_,k)=>res[k]!==true);
+  $('qpos').textContent='Fin du quiz';$('qbar').style.transform='scaleX(0)';
+  $('stage').innerHTML=`<div class="endc"><div class="big">${ok} / ${Q.length}</div>
+   <p>${ok===Q.length?'Sans faute. L\'équipe parle couramment le projet.':'Rébus trouvés par la salle. Voici ceux qui ont résisté :'}</p>
+   ${miss.length?`<ul class="miss">${miss.map(i=>`<li>${R[i].ans}</li>`).join('')}</ul>`:''}
+   <div class="qctl"><button class="btn primary" data-q="restart">Rejouer en mélangeant</button><button class="btn" data-q="close">Retour à la bibliothèque</button></div></div>`;
+}
+$('quiz').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!b)return;
+  ({prev:qPrev,next:qNext,reveal:qReveal,yes:()=>qJudge(true),no:()=>qJudge(false),close:qClose,
+    restart:()=>{for(let i=Q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[Q[i],Q[j]]=[Q[j],Q[i]];}qi=0;res=new Array(Q.length).fill(null);qShow();}})[b.dataset.q]();});
+$('startQuiz').addEventListener('click',qStart);
+$('qclose').addEventListener('click',qClose);
+$('qtimerBtn').addEventListener('click',e=>{timerOn=!timerOn;e.currentTarget.setAttribute('aria-pressed',timerOn);
+  e.currentTarget.textContent=timerOn?'Chrono 30 s':'Chrono coupé';$('qtimer').classList.toggle('off',!timerOn);if(!ended)startT();});
+$('qfs').addEventListener('click',()=>{const el=$('quiz');
+  try{const pr=document.fullscreenElement?document.exitFullscreen():el.requestFullscreen?.();pr&&pr.catch&&pr.catch(()=>{});}catch(_){}});
+document.addEventListener('keydown',e=>{if($('quiz').hidden)return;
+  if(e.key==='Escape'){qClose();return;}
+  if(ended)return;
+  if(e.target.closest&&e.target.closest('button')&&(e.key===' '||e.key==='Enter'))return;
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();revealed?(res[qi]!==null?qNext():null):qReveal();}
+  else if(e.key==='ArrowRight'){qNext();}
+  else if(e.key==='ArrowLeft'){qPrev();}});
+
+render();
+</script>
+
+</body>
+</html>
